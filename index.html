@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="refresh" content="300">
-<title>Nobilezze Club — Executive Dashboard · 2026-04-14</title>
+<title>Nobilezze Club — Executive Dashboard · 2026-04-13</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600&display=swap');
   *,*::before,*::after{box-sizing:border-box}
@@ -19,8 +19,6 @@
   }
   html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;line-height:1.5}
   .wrap{max-width:1320px;margin:0 auto;padding:32px 24px 72px}
-
-  /* HEADER */
   header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:24px;border-bottom:2px solid var(--border);margin-bottom:32px;flex-wrap:wrap}
   .brand{display:flex;flex-direction:column;gap:4px}
   .brand-kicker{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:600}
@@ -28,26 +26,21 @@
   .brand-sub{color:var(--text-dim);font-size:14px}
   .meta-info{font-size:12px;color:var(--text-dim);text-align:right}
   .meta-info strong{color:var(--text);display:block;font-size:15px;font-family:var(--serif);font-weight:500}
-
-  /* TOGGLE */
+</style>
+<style>
   .toggle-bar{display:flex;align-items:center;gap:12px;margin-bottom:28px}
   .toggle-bar label{font-size:13px;color:var(--text-dim);font-weight:500}
   .tg{display:inline-flex;background:var(--surface);border:1px solid var(--border);border-radius:8px;overflow:hidden}
   .tg button{border:none;background:transparent;padding:10px 20px;font-size:13px;font-family:var(--sans);font-weight:500;color:var(--text-dim);cursor:pointer;transition:all .2s;min-height:44px}
   .tg button.active{background:var(--accent);color:#fff}
-
-  /* BANNER */
   .banner{border-radius:var(--radius);padding:14px 20px;margin-bottom:28px;font-size:14px;line-height:1.6;border-left:4px solid}
   .banner.signal-ok{background:#F0F7F4;border-left-color:var(--good);color:#2A5A46}
+  .banner.signal-warn{background:#FDF3EF;border-left-color:var(--warn);color:#8B2A1A}
   .banner b{font-weight:600}
-
-  /* SECTIONS */
   section{margin-bottom:40px}
   .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;gap:8px;flex-wrap:wrap}
   .sec-title{font-family:var(--serif);font-size:16px;font-weight:500;letter-spacing:.01em}
   .sec-note{font-size:12px;color:var(--text-dim)}
-
-  /* KPI */
   .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px}
   .kpi{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px 14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .kpi::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:var(--accent-dim);opacity:.4}
@@ -56,13 +49,9 @@
   .kpi-delta{font-size:11.5px;margin-top:6px;font-weight:500;display:flex;align-items:center;gap:4px}
   .kpi-delta.up{color:var(--good)}.kpi-delta.down{color:var(--bad)}.kpi-delta.warn{color:var(--warn)}.kpi-delta.flat{color:var(--text-dim)}
   .kpi.hl::after{background:var(--accent);opacity:.8}
-
-  /* PANELS */
   .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
   .panel+.panel{margin-top:16px}
   .two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-  /* TABLES */
   .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
   table{width:100%;border-collapse:collapse;font-size:13px;min-width:640px}
   th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
@@ -71,47 +60,33 @@
   td.na{color:var(--text-dim);font-style:italic;text-align:right}
   tr:last-child td{border-bottom:none}
   .top-badge{background:var(--accent);color:#fff;font-size:9px;padding:2px 6px;border-radius:99px;margin-left:6px;font-weight:600}
-
-  /* CHART */
+</style>
+<style>
   .chart-wrap{position:relative;height:220px}
   canvas{display:block}
-
-  /* FUNNEL */
   .funnel-wrap{display:flex;gap:0;align-items:stretch}
   .funnel-step{flex:1;text-align:center;padding:14px 6px;border-right:1px solid var(--border);position:relative}
   .funnel-step:last-child{border-right:none}
   .funnel-num{font-family:var(--serif);font-size:24px;font-weight:600}
   .funnel-label{font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);margin-top:4px}
   .funnel-rate{font-size:11px;color:var(--accent);margin-top:4px;font-weight:600}
-
-  /* SOURCE */
   .source-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border)}
   .source-row:last-child{border-bottom:none}
-  .source-name{min-width:100px;font-size:13px;flex-shrink:0}
+  .source-name{min-width:120px;font-size:13px;flex-shrink:0}
   .source-bar-bg{flex:1;height:8px;background:var(--surface-2);border-radius:4px;overflow:hidden}
   .source-bar{height:100%;border-radius:4px;background:var(--accent)}
   .source-pct{min-width:36px;text-align:right;font-size:12px;font-weight:600;color:var(--text-dim)}
-
-  /* NARRATIVE */
   .narr{font-size:14px;line-height:1.7}.narr p{margin:0 0 10px}.narr p:last-child{margin:0}
-
-  /* PILLS */
   .pill{display:inline-block;padding:3px 8px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.04em}
   .pill.ok{background:rgba(92,139,120,.12);color:var(--good)}
   .pill.warn{background:rgba(184,92,58,.12);color:var(--warn)}
-
-  /* FOOTER */
   footer{margin-top:48px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--text-dim);text-align:center}
-
-  /* COLLAPSIBLE */
   details summary{cursor:pointer;font-size:13px;color:var(--accent);font-weight:600;padding:4px 0;list-style:none;user-select:none}
   details summary::before{content:'+ '}details[open] summary::before{content:'− '}
   .kpi-explainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:16px}
   .kpi-exp-item{background:var(--surface-2);border-radius:8px;padding:14px;font-size:13px}
   .kpi-exp-label{font-weight:600;margin-bottom:4px}
   .kpi-exp-text{color:var(--text-dim);line-height:1.5}
-
-  /* VIEW TOGGLE */
   [data-v="w"]{display:none}
   body.w [data-v="d"]{display:none}
   body.w [data-v="w"]{display:block}
@@ -121,27 +96,20 @@
   body.w .funnel-wrap[data-v="d"]{display:none}
   .kpi-grid[data-v="w"]{display:none}
   .funnel-wrap[data-v="w"]{display:none}
-
-  /* PRODUCT */
   .product-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
   .product-item{background:var(--surface-2);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;gap:8px}
   .product-name{font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .product-meta{text-align:right;flex-shrink:0;font-size:12px;color:var(--text-dim)}
   .product-meta strong{display:block;font-family:var(--serif);font-size:15px;color:var(--text);font-weight:600}
-  .cart-item{background:var(--surface-2);border-radius:8px;padding:9px 14px;font-size:13px;display:flex;justify-content:space-between;align-items:center}
-  .cart-item .qty{color:var(--accent);font-weight:600;font-size:12px;flex-shrink:0}
-
-  /* RESPONSIVE */
-  @media(max-width:960px){
-    .two-col{grid-template-columns:1fr}
-    .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
-  }
+  .empty-state{font-size:13px;color:var(--text-dim);padding:20px;text-align:center;background:var(--surface-2);border-radius:8px}
+</style>
+<style>
+  @media(max-width:960px){.two-col{grid-template-columns:1fr}.kpi-grid{grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}}
   @media(max-width:640px){
     .wrap{padding:20px 16px 56px}
     header{margin-bottom:24px;padding-bottom:20px}
     .brand-title{font-size:24px}
     .meta-info{text-align:left}
-    .meta-info strong{font-size:14px}
     .toggle-bar{justify-content:center}
     .tg button{padding:10px 16px;font-size:12px}
     .kpi-grid{grid-template-columns:repeat(2,1fr);gap:10px}
@@ -153,9 +121,7 @@
     .sec-title{font-size:14px}
     .banner{padding:12px 16px;font-size:13px}
     .funnel-num{font-size:20px}
-    .funnel-label{font-size:9px}
-    .source-name{min-width:80px;font-size:12px}
-    .source-pct{font-size:11px}
+    .source-name{min-width:90px;font-size:12px}
     .narr{font-size:13px}
     .product-grid{grid-template-columns:1fr}
     .chart-wrap{height:180px}
@@ -163,11 +129,7 @@
     th,td{padding:8px 10px}
     footer{font-size:11px}
   }
-  @media(max-width:380px){
-    .kpi-grid{grid-template-columns:1fr}
-    .kpi-value{font-size:24px}
-    .tg button{padding:10px 12px;font-size:11px}
-  }
+  @media(max-width:380px){.kpi-grid{grid-template-columns:1fr}.kpi-value{font-size:24px}.tg button{padding:10px 12px;font-size:11px}}
 </style>
 </head>
 <body>
@@ -180,7 +142,7 @@
       <span class="brand-sub">Napi hirdetési és webforgalom összefoglaló</span>
     </div>
     <div class="meta-info">
-      <strong>2026. április 14., kedd</strong>
+      <strong>2026. április 13., hétfő</strong>
       Frissítve: 2026-04-14<br>
       Meta Ads · Google Analytics 4
     </div>
@@ -195,143 +157,150 @@
   </div>
 
   <!-- DAILY SIGNAL -->
-  <div class="banner signal-ok" data-v="d">
-    <b>✓ Kiváló nap:</b> A ROAS 9,06× — a hirdetések minden elköltött forintból 9 Ft bevételt hoztak. 4 vásárlás érkezett 287 950 Ft értékben. A látogatók átlagosan 1 perc 58 másodpercet töltöttek az oldalon.
+  <div class="banner signal-warn" data-v="d">
+    <b>⚠ Figyelem:</b> Tegnap a Meta pixel nem rögzített vásárlást — 23 600 Ft hirdetési kiadáshoz nem párosult mért konverzió. Ez valószínűleg technikai mérési hiba, nem valódi teljesítményesés. A weboldalt 424 látogató kereste fel, a forgalom stabilan érkezett.
   </div>
   <div class="banner signal-ok" data-v="w">
-    <b>✓ Erős hét:</b> Az elmúlt 7 napban 8 vásárlás, 528 401 Ft bevétel (Meta), összesített ROAS 3,79×. A Reels és Shopping formátumok dominálnak.
+    <b>✓ Stabil hét:</b> Az elmúlt 7 napban 4 vásárlás érkezett 240 451 Ft Meta-bevétellel, ROAS: 2,20×. Az április 11-i nap kiemelkedett 2 konverzióval és 5,74×-es megtérüléssel.
   </div>
 
   <!-- KPI SNAPSHOT -->
   <section>
     <div class="sec-head">
-      <span class="sec-title" data-v="d">Kulcs mutatók — Tegnap (2026-04-14)</span>
-      <span class="sec-title" data-v="w">Kulcs mutatók — Elmúlt 7 nap (ápr. 8–14)</span>
+      <span class="sec-title" data-v="d">Kulcs mutatók — Tegnap (2026-04-13)</span>
+      <span class="sec-title" data-v="w">Kulcs mutatók — Elmúlt 7 nap (ápr. 7–13)</span>
       <span class="sec-note" data-v="d">vs. előző 7 nap átlag</span>
     </div>
 
+    <!-- NAPI KPI -->
     <div class="kpi-grid" data-v="d">
       <div class="kpi hl">
         <div class="kpi-label">Költés</div>
-        <div class="kpi-value">31 790 Ft</div>
-        <div class="kpi-delta warn">▲ +60% a 7d átlaghoz (19 924 Ft)</div>
+        <div class="kpi-value">23 600 Ft</div>
+        <div class="kpi-delta warn">▲ +51% a 7n átlaghoz (15 610 Ft)</div>
       </div>
       <div class="kpi hl">
         <div class="kpi-label">ROAS</div>
-        <div class="kpi-value">9,06×</div>
-        <div class="kpi-delta up">Minden 1 Ft → 9 Ft bevétel</div>
+        <div class="kpi-value">–</div>
+        <div class="kpi-delta warn">⚠ Pixel nem mért vásárlást</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Vásárlások (Meta)</div>
+        <div class="kpi-value">0</div>
+        <div class="kpi-delta down">▼ 7n összesen: 4 vásárlás</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Bevétel (Meta)</div>
+        <div class="kpi-value">–</div>
+        <div class="kpi-delta warn">Nincs rögzített konverzió</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">CPA</div>
+        <div class="kpi-value">–</div>
+        <div class="kpi-delta flat">7n átlag: 27 317 Ft</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-value">4,07%</div>
+        <div class="kpi-delta down">▼ −21% a 7n átlaghoz (5,18%)</div>
+      </div>
+    </div>
+    <!-- NAPI KPI (folyt.) -->
+    <div class="kpi-grid" data-v="d" style="margin-top:14px">
+      <div class="kpi">
+        <div class="kpi-label">CPM</div>
+        <div class="kpi-value">1 535 Ft</div>
+        <div class="kpi-delta warn">▲ +10% a 7n átlaghoz (1 399 Ft)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Elérés</div>
+        <div class="kpi-value">11 255</div>
+        <div class="kpi-delta up">▲ +52% a 7n átlaghoz (~7 397/nap)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Frekvencia</div>
+        <div class="kpi-value">1,37</div>
+        <div class="kpi-delta flat">▼ −9% a 7n átlaghoz (1,51)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Sessions (GA4)</div>
+        <div class="kpi-value">424</div>
+        <div class="kpi-delta up">▲ +33% a 7n átlaghoz (318/nap)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Átl. munkamenet</div>
+        <div class="kpi-value">1p 03mp</div>
+        <div class="kpi-delta flat">≈ 7n átlag (1p 05mp)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Tranzakciók (GA4)</div>
+        <div class="kpi-value">0</div>
+        <div class="kpi-delta flat">7n összesen: 3 tranzakció</div>
+      </div>
+    </div>
+
+    <!-- HETI KPI -->
+    <div class="kpi-grid" data-v="w">
+      <div class="kpi hl">
+        <div class="kpi-label">Költés</div>
+        <div class="kpi-value">109 267 Ft</div>
+        <div class="kpi-delta flat">7 nap összesen (ápr. 7–13)</div>
+      </div>
+      <div class="kpi hl">
+        <div class="kpi-label">ROAS</div>
+        <div class="kpi-value">2,20×</div>
+        <div class="kpi-delta up">Heti összesített</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Vásárlások (Meta)</div>
         <div class="kpi-value">4</div>
-        <div class="kpi-delta up">▲ +251% a 7d átlaghoz (1,1/nap)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Bevétel (Meta)</div>
-        <div class="kpi-value">287 950 Ft</div>
-        <div class="kpi-delta up">Konverzió érték</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">CPA</div>
-        <div class="kpi-value">7 948 Ft</div>
-        <div class="kpi-delta up">▼ Alacsonyabb = jobb</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">CTR</div>
-        <div class="kpi-value">4,18%</div>
-        <div class="kpi-delta down">▼ −12% a 7d átlaghoz (4,75%)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">CPM</div>
-        <div class="kpi-value">1 927 Ft</div>
-        <div class="kpi-delta warn">▲ +29% a 7d átlaghoz (1 492 Ft)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Elérés</div>
-        <div class="kpi-value">11 812</div>
-        <div class="kpi-delta up">▲ +13% a 7d átlaghoz (10 447)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Frekvencia</div>
-        <div class="kpi-value">1,40</div>
-        <div class="kpi-delta warn">▲ +11% a 7d átlaghoz (1,26)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Sessions (GA4)</div>
-        <div class="kpi-value">415</div>
-        <div class="kpi-delta down">▼ −22% az 5d átlaghoz (529)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Átl. munkamenet</div>
-        <div class="kpi-value">1p 58mp</div>
-        <div class="kpi-delta up">▲ +65% az 5d átlaghoz (1p 12mp)</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Tranzakciók (GA4)</div>
-        <div class="kpi-value">3</div>
-        <div class="kpi-delta up">237 960 Ft GA4 bevétel</div>
-      </div>
-    </div>
-
-    <div class="kpi-grid" data-v="w">
-      <div class="kpi hl">
-        <div class="kpi-label">Költés</div>
-        <div class="kpi-value">139 470 Ft</div>
-        <div class="kpi-delta flat">7 nap összesen (ápr. 8–14)</div>
-      </div>
-      <div class="kpi hl">
-        <div class="kpi-label">ROAS</div>
-        <div class="kpi-value">3,79×</div>
-        <div class="kpi-delta up">Heti átlag</div>
-      </div>
-      <div class="kpi">
-        <div class="kpi-label">Vásárlások (Meta)</div>
-        <div class="kpi-value">8</div>
         <div class="kpi-delta up">Összesen a héten</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Bevétel (Meta)</div>
-        <div class="kpi-value">528 401 Ft</div>
+        <div class="kpi-value">240 451 Ft</div>
         <div class="kpi-delta up">Konverzió érték összesen</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">CPA</div>
-        <div class="kpi-value">17 434 Ft</div>
+        <div class="kpi-value">27 317 Ft</div>
         <div class="kpi-delta flat">Átlag vásárlásonként</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">CTR</div>
-        <div class="kpi-value">4,75%</div>
+        <div class="kpi-value">5,18%</div>
         <div class="kpi-delta up">Heti átlag</div>
       </div>
+    </div>
+    <div class="kpi-grid" data-v="w" style="margin-top:14px">
       <div class="kpi">
         <div class="kpi-label">CPM</div>
-        <div class="kpi-value">1 492 Ft</div>
+        <div class="kpi-value">1 399 Ft</div>
         <div class="kpi-delta flat">Heti átlag</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Elérés</div>
-        <div class="kpi-value">73 131</div>
+        <div class="kpi-value">51 776</div>
         <div class="kpi-delta up">Összesen (átfedéssel)</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Frekvencia</div>
-        <div class="kpi-value">1,26</div>
+        <div class="kpi-value">1,51</div>
         <div class="kpi-delta up">Heti átlag — egészséges</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Sessions (GA4)</div>
-        <div class="kpi-value">2 644</div>
-        <div class="kpi-delta flat">5 napból elérhető (ápr. 10–14)</div>
+        <div class="kpi-value">2 227</div>
+        <div class="kpi-delta flat">4 napból elérhető (ápr. 10–13)</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Átl. munkamenet</div>
-        <div class="kpi-value">1p 12mp</div>
-        <div class="kpi-delta flat">5 napos átlag</div>
+        <div class="kpi-value">1p 05mp</div>
+        <div class="kpi-delta flat">4 napos átlag</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">GA4 Bevétel</div>
-        <div class="kpi-value">396 432 Ft</div>
+        <div class="kpi-value">158 472 Ft</div>
         <div class="kpi-delta flat">GA4 purchase revenue</div>
       </div>
     </div>
@@ -340,62 +309,20 @@
   <!-- TERMÉKEK -->
   <section>
     <div class="sec-head">
-      <span class="sec-title" data-v="d">Termékek — Tegnap (ápr. 14)</span>
+      <span class="sec-title" data-v="d">Termékek — Tegnap (ápr. 13)</span>
       <span class="sec-title" data-v="w">Termékek — Elmúlt 7 nap</span>
       <span class="sec-note">GA4 ecommerce alapján</span>
     </div>
-
     <div data-v="d">
-      <div class="two-col">
-        <div class="panel">
-          <div class="sec-head" style="margin-bottom:10px"><span class="sec-title" style="font-size:14px">Vásárolt termékek</span><span class="sec-note">4 db · 237 960 Ft</span></div>
-          <div class="product-grid">
-            <div class="product-item"><span class="product-name">Mind 001</span><div class="product-meta"><strong>64 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Arden Luggage</span><div class="product-meta"><strong>63 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Gem 07 Yogurt</span><div class="product-meta"><strong>59 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Arden Powder Blush</span><div class="product-meta"><strong>48 990 Ft</strong>1 db</div></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="sec-head" style="margin-bottom:10px"><span class="sec-title" style="font-size:14px">Kosárba helyezve (nem vásárolt)</span><span class="sec-note">2 termék</span></div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <div class="cart-item"><span>Beat Soft Crossbody</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Love Click Chevron Big</span><span class="qty">1×</span></div>
-          </div>
-        </div>
-      </div>
+      <div class="empty-state">Tegnap (ápr. 13.) nem érkezett rögzített vásárlás. GA4 is 0 tranzakciót mutat.</div>
     </div>
-
     <div data-v="w">
-      <div class="two-col">
-        <div class="panel">
-          <div class="sec-head" style="margin-bottom:10px"><span class="sec-title" style="font-size:14px">Vásárolt termékek</span><span class="sec-note">7 db</span></div>
-          <div class="product-grid">
-            <div class="product-item"><span class="product-name">9060 Black-White</span><div class="product-meta"><strong>74 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Love One Mini Tote</span><div class="product-meta"><strong>69 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Mind 001</span><div class="product-meta"><strong>64 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Arden Luggage</span><div class="product-meta"><strong>63 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Gem 07 Yogurt</span><div class="product-meta"><strong>59 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Arden Powder Blush</span><div class="product-meta"><strong>48 990 Ft</strong>1 db</div></div>
-            <div class="product-item"><span class="product-name">Babol 01 Monogram</span><div class="product-meta"><strong>23 990 Ft</strong>1 db</div></div>
-          </div>
-        </div>
-        <div class="panel">
-          <div class="sec-head" style="margin-bottom:10px"><span class="sec-title" style="font-size:14px">Kosárba helyezve (nem vásárolt)</span><span class="sec-note">12 termék</span></div>
-          <div style="display:flex;flex-direction:column;gap:6px">
-            <div class="cart-item"><span>Love Click Chevron Big</span><span class="qty">3×</span></div>
-            <div class="cart-item"><span>AF 1 Low '07 SE Spruce Aura</span><span class="qty">2×</span></div>
-            <div class="cart-item"><span>Beat Soft Crossbody</span><span class="qty">2×</span></div>
-            <div class="cart-item"><span>Gem 07 Glitter</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Jet Set Tote</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Pretty 06</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Reed Icon</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Tazz Leopard</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Dunk Low Next Nature White Mint</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Mamba Mini</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Sheila Powder Blush</span><span class="qty">1×</span></div>
-            <div class="cart-item"><span>Vow</span><span class="qty">1×</span></div>
-          </div>
+      <div class="panel">
+        <div class="sec-head" style="margin-bottom:12px"><span class="sec-title" style="font-size:14px">Vásárolt termékek</span><span class="sec-note">3 db · 168 970 Ft</span></div>
+        <div class="product-grid">
+          <div class="product-item"><span class="product-name">9060 Black-White</span><div class="product-meta"><strong>74 990 Ft</strong>1 db</div></div>
+          <div class="product-item"><span class="product-name">Love One Mini Tote</span><div class="product-meta"><strong>69 990 Ft</strong>1 db</div></div>
+          <div class="product-item"><span class="product-name">Babol 01 Monogram</span><div class="product-meta"><strong>23 990 Ft</strong>1 db</div></div>
         </div>
       </div>
     </div>
@@ -405,7 +332,7 @@
   <section class="panel">
     <div class="sec-head">
       <span class="sec-title">7 napos trend</span>
-      <span class="sec-note">Költés (Ft) · Sessions · Vásárlások</span>
+      <span class="sec-note">Költés (Ft) · Sessions · Vásárlások (Meta) · ápr. 7–13</span>
     </div>
     <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
   </section>
@@ -413,30 +340,23 @@
   <!-- TOP CREATIVE -->
   <section class="panel">
     <div class="sec-head">
-      <span class="sec-title" data-v="d">Top kreatívok — Tegnap (ápr. 14)</span>
-      <span class="sec-title" data-v="w">Top kreatívok — Elmúlt 7 nap</span>
+      <span class="sec-title">Top kreatívok — 7 napos összesítő (ápr. 7–13)</span>
       <span class="sec-note">Spend szerint rendezve</span>
     </div>
-    <div data-v="d">
     <div class="table-scroll">
     <table>
-      <thead><tr><th>Hirdetés neve</th><th class="num">Költés</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">Bevétel</th><th class="num">ROAS</th></tr></thead>
+      <thead><tr><th>Hirdetés neve</th><th class="num">Költés</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">ROAS</th></tr></thead>
       <tbody>
-        <tr><td>Reels | Gina | <span class="top-badge">TOP CTR</span></td><td class="num">11 819 Ft</td><td class="num">7,00%</td><td class="num">2</td><td class="num">114 980 Ft</td><td class="num">9,73×</td></tr>
-        <tr><td>Shopping | Feed <span class="top-badge">TOP ROAS</span></td><td class="num">9 996 Ft</td><td class="num">2,62%</td><td class="num">2</td><td class="num">172 970 Ft</td><td class="num">17,30×</td></tr>
-        <tr><td>Reels | Dorka |</td><td class="num">6 166 Ft</td><td class="num">3,82%</td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>Carousel | MIX |</td><td class="num">1 409 Ft</td><td class="num">1,45%</td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>Reels | V2</td><td class="num">1 303 Ft</td><td class="num">4,71%</td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>Reels | KV |</td><td class="num">590 Ft</td><td class="num">0,00%</td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>Reels | V1</td><td class="num">282 Ft</td><td class="num">15,89% <span class="pill ok">▲</span></td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>Feed | KV |</td><td class="num">127 Ft</td><td class="num">2,99%</td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
-        <tr><td>Reels | V3</td><td class="num">98 Ft</td><td class="num">2,38%</td><td class="num">0</td><td class="num">–</td><td class="num">–</td></tr>
+        <tr><td>Reels | Gina | <span class="top-badge">TOP CTR</span></td><td class="num">34 589 Ft</td><td class="num">7,57%</td><td class="num">1</td><td class="num">2,31×</td></tr>
+        <tr><td>Reels | Dorka |</td><td class="num">24 787 Ft</td><td class="num">4,42%</td><td class="num">0</td><td class="na">–</td></tr>
+        <tr><td>Carousel | MIX |</td><td class="num">17 260 Ft</td><td class="num">1,20%</td><td class="num">1</td><td class="num">1,51×</td></tr>
+        <tr><td>Reels | Teaser</td><td class="num">14 319 Ft</td><td class="num">4,27%</td><td class="num">0</td><td class="na">–</td></tr>
+        <tr><td>Reels | Gina</td><td class="num">11 063 Ft</td><td class="num">9,45%</td><td class="num">0</td><td class="na">–</td></tr>
+        <tr><td>Shopping | Feed <span class="top-badge">TOP ROAS</span></td><td class="num">3 356 Ft</td><td class="num">1,84%</td><td class="num">1</td><td class="num">17,73×</td></tr>
+        <tr><td>Reels | KV |</td><td class="num">2 133 Ft</td><td class="num">3,48%</td><td class="num">0</td><td class="na">–</td></tr>
+        <tr><td>Feed | KV | <span class="top-badge" style="background:var(--good)">42,61×</span></td><td class="num">1 760 Ft</td><td class="num">2,67%</td><td class="num">1</td><td class="num">42,61×</td></tr>
       </tbody>
     </table>
-    </div>
-    </div>
-    <div data-v="w">
-      <p style="font-size:13px;color:var(--text-dim);margin:0">Heti kreatív szintű bontás a következő frissítésben érhető el. Tegnap nézetre váltva hirdetés szintű adatot látsz.</p>
     </div>
   </section>
 
@@ -445,45 +365,42 @@
     <div class="panel">
       <div class="sec-head">
         <span class="sec-title">Forgalomforrás</span>
-        <span class="sec-note" data-v="d">GA4 source · ápr. 14</span>
-        <span class="sec-note" data-v="w">GA4 source · ápr. 10–14</span>
+        <span class="sec-note" data-v="d">GA4 · ápr. 13 (424 session)</span>
+        <span class="sec-note" data-v="w">GA4 · ápr. 10–13 (2 227 session)</span>
       </div>
       <div data-v="d" style="margin-top:4px">
-        <div class="source-row"><span class="source-name">Facebook</span><div class="source-bar-bg"><div class="source-bar" style="width:55.5%"></div></div><span class="source-pct">55,5%</span></div>
-        <div class="source-row"><span class="source-name">Instagram</span><div class="source-bar-bg"><div class="source-bar" style="width:1.7%;background:#E1306C"></div></div><span class="source-pct">1,7%</span></div>
-        <div class="source-row"><span class="source-name">TikTok</span><div class="source-bar-bg"><div class="source-bar" style="width:0.5%;background:#010101"></div></div><span class="source-pct">0%</span></div>
-        <div class="source-row"><span class="source-name">Google</span><div class="source-bar-bg"><div class="source-bar" style="width:1.8%;background:var(--good)"></div></div><span class="source-pct">1,8%</span></div>
-        <div class="source-row"><span class="source-name">Direkt</span><div class="source-bar-bg"><div class="source-bar" style="width:8.6%;background:var(--text-dim)"></div></div><span class="source-pct">8,6%</span></div>
-        <div class="source-row"><span class="source-name">Email</span><div class="source-bar-bg"><div class="source-bar" style="width:1.8%;background:#D4860A"></div></div><span class="source-pct">1,8%</span></div>
-        <div class="source-row"><span class="source-name">Egyéb</span><div class="source-bar-bg"><div class="source-bar" style="width:30.5%;background:var(--accent-dim)"></div></div><span class="source-pct">30,5%</span></div>
+        <div class="source-row"><span class="source-name">Fizetett social</span><div class="source-bar-bg"><div class="source-bar" style="width:77.1%"></div></div><span class="source-pct">77,1%</span></div>
+        <div class="source-row"><span class="source-name">Direkt</span><div class="source-bar-bg"><div class="source-bar" style="width:10.4%;background:var(--text-dim)"></div></div><span class="source-pct">10,4%</span></div>
+        <div class="source-row"><span class="source-name">Organikus social</span><div class="source-bar-bg"><div class="source-bar" style="width:7.3%;background:#5C8B78"></div></div><span class="source-pct">7,3%</span></div>
+        <div class="source-row"><span class="source-name">Organikus keresés</span><div class="source-bar-bg"><div class="source-bar" style="width:2.6%;background:var(--good)"></div></div><span class="source-pct">2,6%</span></div>
+        <div class="source-row"><span class="source-name">Email</span><div class="source-bar-bg"><div class="source-bar" style="width:0.7%;background:#D4860A"></div></div><span class="source-pct">0,7%</span></div>
+        <div class="source-row"><span class="source-name">Egyéb</span><div class="source-bar-bg"><div class="source-bar" style="width:1.9%;background:var(--accent-dim)"></div></div><span class="source-pct">1,9%</span></div>
       </div>
       <div data-v="w" style="margin-top:4px">
-        <div class="source-row"><span class="source-name">Facebook</span><div class="source-bar-bg"><div class="source-bar" style="width:49%"></div></div><span class="source-pct">49%</span></div>
-        <div class="source-row"><span class="source-name">TikTok</span><div class="source-bar-bg"><div class="source-bar" style="width:29%;background:#010101"></div></div><span class="source-pct">29%</span></div>
-        <div class="source-row"><span class="source-name">Direkt</span><div class="source-bar-bg"><div class="source-bar" style="width:8%;background:var(--text-dim)"></div></div><span class="source-pct">8%</span></div>
-        <div class="source-row"><span class="source-name">Google</span><div class="source-bar-bg"><div class="source-bar" style="width:2.3%;background:var(--good)"></div></div><span class="source-pct">2,3%</span></div>
-        <div class="source-row"><span class="source-name">Instagram</span><div class="source-bar-bg"><div class="source-bar" style="width:2.1%;background:#E1306C"></div></div><span class="source-pct">2,1%</span></div>
-        <div class="source-row"><span class="source-name">Email</span><div class="source-bar-bg"><div class="source-bar" style="width:2.2%;background:#D4860A"></div></div><span class="source-pct">2,2%</span></div>
-        <div class="source-row"><span class="source-name">Egyéb</span><div class="source-bar-bg"><div class="source-bar" style="width:7.7%;background:var(--accent-dim)"></div></div><span class="source-pct">7,7%</span></div>
+        <div class="source-row"><span class="source-name">Fizetett social</span><div class="source-bar-bg"><div class="source-bar" style="width:80.4%"></div></div><span class="source-pct">80,4%</span></div>
+        <div class="source-row"><span class="source-name">Direkt</span><div class="source-bar-bg"><div class="source-bar" style="width:7.9%;background:var(--text-dim)"></div></div><span class="source-pct">7,9%</span></div>
+        <div class="source-row"><span class="source-name">Organikus social</span><div class="source-bar-bg"><div class="source-bar" style="width:5%;background:#5C8B78"></div></div><span class="source-pct">5,0%</span></div>
+        <div class="source-row"><span class="source-name">Organikus keresés</span><div class="source-bar-bg"><div class="source-bar" style="width:2.4%;background:var(--good)"></div></div><span class="source-pct">2,4%</span></div>
+        <div class="source-row"><span class="source-name">Email</span><div class="source-bar-bg"><div class="source-bar" style="width:2.3%;background:#D4860A"></div></div><span class="source-pct">2,3%</span></div>
+        <div class="source-row"><span class="source-name">Egyéb</span><div class="source-bar-bg"><div class="source-bar" style="width:2%;background:var(--accent-dim)"></div></div><span class="source-pct">2,0%</span></div>
       </div>
     </div>
-
     <div class="panel">
       <div class="sec-head">
         <span class="sec-title" data-v="d">Tölcsér — Tegnap</span>
         <span class="sec-title" data-v="w">Tölcsér — Elmúlt 7 nap</span>
       </div>
       <div class="funnel-wrap" data-v="d" style="margin-top:8px">
-        <div class="funnel-step"><div class="funnel-num">415</div><div class="funnel-label">Session</div><div class="funnel-rate">–</div></div>
-        <div class="funnel-step"><div class="funnel-num">6</div><div class="funnel-label">Kosárba</div><div class="funnel-rate">1,4%</div></div>
-        <div class="funnel-step"><div class="funnel-num">4</div><div class="funnel-label">Vásárlás</div><div class="funnel-rate">0,96%</div></div>
+        <div class="funnel-step"><div class="funnel-num">424</div><div class="funnel-label">Session</div><div class="funnel-rate">–</div></div>
+        <div class="funnel-step"><div class="funnel-num">–</div><div class="funnel-label">Kosárba</div><div class="funnel-rate">N/A</div></div>
+        <div class="funnel-step"><div class="funnel-num">0</div><div class="funnel-label">Vásárlás</div><div class="funnel-rate">0%</div></div>
       </div>
       <div class="funnel-wrap" data-v="w" style="margin-top:8px">
-        <div class="funnel-step"><div class="funnel-num">2 644</div><div class="funnel-label">Session</div><div class="funnel-rate">–</div></div>
-        <div class="funnel-step"><div class="funnel-num">32</div><div class="funnel-label">Kosárba</div><div class="funnel-rate">1,2%</div></div>
-        <div class="funnel-step"><div class="funnel-num">8</div><div class="funnel-label">Vásárlás</div><div class="funnel-rate">0,30%</div></div>
+        <div class="funnel-step"><div class="funnel-num">2 227</div><div class="funnel-label">Session</div><div class="funnel-rate">–</div></div>
+        <div class="funnel-step"><div class="funnel-num">–</div><div class="funnel-label">Kosárba</div><div class="funnel-rate">N/A</div></div>
+        <div class="funnel-step"><div class="funnel-num">3</div><div class="funnel-label">Vásárlás</div><div class="funnel-rate">0,13%</div></div>
       </div>
-      <p style="font-size:11px;color:var(--text-dim);margin:16px 0 0;">Vásárlás = Meta pixel. Kosár = GA4 add_to_cart összeg.</p>
+      <p style="font-size:11px;color:var(--text-dim);margin:16px 0 0;">Vásárlás = GA4 tranzakciók. Kosár adat ehhez az időszakhoz nem elérhető.</p>
     </div>
   </div>
 
@@ -491,31 +408,32 @@
   <section class="panel" style="margin-top:16px">
     <div class="sec-head">
       <span class="sec-title">Napi bontás — Elmúlt 7 nap</span>
-      <span class="sec-note">Meta Ads + GA4 · ápr. 8–14</span>
+      <span class="sec-note">Meta Ads + GA4 · ápr. 7–13</span>
     </div>
     <div class="table-scroll">
     <table>
-      <thead><tr><th>Dátum</th><th class="num">Költés</th><th class="num">Elérés</th><th class="num">CPM</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">Bevétel</th><th class="num">Sessions</th><th class="num">Átl. idő</th></tr></thead>
+      <thead><tr><th>Dátum</th><th class="num">Költés</th><th class="num">Megjelenés</th><th class="num">CPM</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">Bevétel</th><th class="num">Sessions</th><th class="num">Átl. idő</th></tr></thead>
       <tbody>
-        <tr><td>Ápr. 8. (sze)</td><td class="num">9 236</td><td class="num">8 151</td><td class="num">966</td><td class="num">4,18%</td><td class="num">0</td><td class="num">–</td><td class="na">–</td><td class="na">–</td></tr>
-        <tr><td>Ápr. 9. (cs)</td><td class="num">13 913</td><td class="num">15 125</td><td class="num">797</td><td class="num">8,57%</td><td class="num">0</td><td class="num">–</td><td class="na">–</td><td class="na">–</td></tr>
-        <tr><td>Ápr. 10. (p)</td><td class="num">9 463</td><td class="num">7 741</td><td class="num">1 158</td><td class="num">2,07%</td><td class="num">1</td><td class="num">25 980</td><td class="num">195</td><td class="num">0:47</td></tr>
-        <tr><td>Ápr. 11. (szo)</td><td class="num">27 012</td><td class="num">9 169</td><td class="num">2 336</td><td class="num">5,64%</td><td class="num">2</td><td class="num">154 980</td><td class="num">1 004</td><td class="num">1:16</td></tr>
-        <tr><td>Ápr. 12. (v)</td><td class="num">24 456</td><td class="num">9 878</td><td class="num">1 725</td><td class="num">4,51%</td><td class="num">1</td><td class="num">59 491</td><td class="num">606</td><td class="num">0:54</td></tr>
-        <tr><td>Ápr. 13. (h)</td><td class="num">23 600</td><td class="num">11 255</td><td class="num">1 535</td><td class="num">4,07%</td><td class="num">0</td><td class="num">–</td><td class="num">424</td><td class="num">1:03</td></tr>
-        <tr style="background:rgba(184,150,90,.06);font-weight:600"><td>Ápr. 14. (k) ← tegnap</td><td class="num">31 790</td><td class="num">11 812</td><td class="num">1 927</td><td class="num">4,18%</td><td class="num">4</td><td class="num">287 950</td><td class="num">415</td><td class="num">1:58</td></tr>
+        <tr><td>Ápr. 7. (h)</td><td class="num">1 587</td><td class="num">1 815</td><td class="num">874 Ft</td><td class="num">3,64%</td><td class="num">0</td><td class="na">–</td><td class="na">–</td><td class="na">–</td></tr>
+        <tr><td>Ápr. 8. (k)</td><td class="num">9 236</td><td class="num">9 559</td><td class="num">966 Ft</td><td class="num">4,18%</td><td class="num">0</td><td class="na">–</td><td class="na">–</td><td class="na">–</td></tr>
+        <tr><td>Ápr. 9. (sze)</td><td class="num">13 913</td><td class="num">17 454</td><td class="num">797 Ft</td><td class="num">8,57%</td><td class="num">0</td><td class="na">–</td><td class="na">–</td><td class="na">–</td></tr>
+        <tr><td>Ápr. 10. (cs)</td><td class="num">9 463</td><td class="num">8 169</td><td class="num">1 158 Ft</td><td class="num">2,07%</td><td class="num">1</td><td class="num">25 979 Ft</td><td class="num">195</td><td class="num">0:47</td></tr>
+        <tr><td>Ápr. 11. (p)</td><td class="num">27 012</td><td class="num">11 564</td><td class="num">2 336 Ft</td><td class="num">5,64%</td><td class="num">2</td><td class="num">154 948 Ft</td><td class="num">1 004</td><td class="num">1:16</td></tr>
+        <tr><td>Ápr. 12. (szo)</td><td class="num">24 456</td><td class="num">14 176</td><td class="num">1 725 Ft</td><td class="num">4,51%</td><td class="num">1</td><td class="num">59 484 Ft</td><td class="num">606</td><td class="num">0:54</td></tr>
+        <tr style="background:rgba(184,150,90,.06);font-weight:600"><td>Ápr. 13. (v) ← tegnap</td><td class="num">23 600</td><td class="num">15 375</td><td class="num">1 535 Ft</td><td class="num">4,07%</td><td class="num">0</td><td class="na">–</td><td class="num">424</td><td class="num">1:03</td></tr>
       </tbody>
     </table>
     </div>
+    <p style="font-size:11px;color:var(--text-dim);margin:10px 0 0;">Bevétel = Meta pixel purchase value. GA4 sessions csak ápr. 10-től elérhetők.</p>
   </section>
 
   <!-- EXECUTIVE SUMMARY -->
   <section class="panel" style="margin-top:16px">
     <div class="sec-head"><span class="sec-title">Executive összefoglaló</span></div>
     <div class="narr">
-      <p>Tegnap (2026-04-14) a hirdetési költés 31 790 Ft volt, 4 vásárlást hozott 287 950 Ft értékben. A ROAS 9,06× — ez az elmúlt hét legjobb napja. A Shopping | Feed kreatív 17,30×-os ROAS-szal teljesített, a Reels | Gina | pedig 7%-os CTR-rel és 9,73× ROAS-szal továbbra is kiemelkedő.</p>
-      <p>A látogatók átlagosan 1 perc 58 másodpercet töltöttek az oldalon, ami 65%-kal több az 5 napos átlagnál — a tartalom relevánsabb volt a szokásosnál.</p>
-      <p>A heti szinten a TikTok volt a második legnagyobb forgalomforrás (29%), főként ápr. 10–12 között. Tegnap Facebook-ról érkezett a forgalom 55%-a, TikTok forrás leállt.</p>
+      <p>2026. április 13-án (hétfő) a Meta hirdetések 23 600 Ft-ot költöttek el, de a rendszer nem rögzített vásárlást — az elmúlt napokban is látott pixelhibára utal, nem valódi teljesítményesésre. A weboldalt 424 látogató kereste fel, ami az előző napok átlagánál magasabb forgalmat jelent.</p>
+      <p>Az elmúlt 7 napban összesen 4 vásárlás érkezett 240 451 Ft Meta-bevétellel (ROAS: 2,20×). Az április 11-i nap kiemelkedett: 2 konverzió, 5,74×-es megtérülés, 1 004 weboldal-látogatás. A Feed | KV | kreatív 42,61×-es, a Shopping | Feed 17,73×-os ROAS-szal teljesített kis büdzsén.</p>
+      <p>A forgalom közel 80%-a Meta hirdetésekből érkezik. A legaktívabb kreatív a Reels | Gina | (34 589 Ft spend, 7,57% CTR), míg a legjobb megtérülést kisebb büdzsével a Feed formátumok hozzák.</p>
     </div>
   </section>
 
@@ -524,11 +442,11 @@
     <details>
       <summary>Mit jelentenek ezek a számok? (KPI magyarázó)</summary>
       <div class="kpi-explainer">
-        <div class="kpi-exp-item"><div class="kpi-exp-label">Költés (Spend)</div><div class="kpi-exp-text">Az adott napon a Meta hirdetésekre elköltött összeg forintban.</div></div>
-        <div class="kpi-exp-item"><div class="kpi-exp-label">ROAS (Return on Ad Spend)</div><div class="kpi-exp-text">Minden 1 Ft hirdetési kiadásra jutó bevétel. ROAS 9× = 1 Ft kiadásból 9 Ft bevétel.</div></div>
-        <div class="kpi-exp-item"><div class="kpi-exp-label">CTR (Click-Through Rate)</div><div class="kpi-exp-text">A hirdetéseket látók hány százaléka kattintott. Magasabb = relevánsabb kreatív.</div></div>
-        <div class="kpi-exp-item"><div class="kpi-exp-label">CPM (Cost Per Mille)</div><div class="kpi-exp-text">1000 megjelenés ára forintban. Alacsonyabb = hatékonyabb elérés.</div></div>
-        <div class="kpi-exp-item"><div class="kpi-exp-label">CPA (Cost Per Acquisition)</div><div class="kpi-exp-text">Egy vásárlás megszerzésének átlagköltsége. Alacsonyabb = hatékonyabb.</div></div>
+        <div class="kpi-exp-item"><div class="kpi-exp-label">Költés</div><div class="kpi-exp-text">Az adott napon a Meta hirdetésekre elköltött összeg forintban.</div></div>
+        <div class="kpi-exp-item"><div class="kpi-exp-label">ROAS</div><div class="kpi-exp-text">Minden 1 Ft hirdetési kiadásra jutó bevétel. ROAS 2× = 1 Ft kiadásból 2 Ft bevétel.</div></div>
+        <div class="kpi-exp-item"><div class="kpi-exp-label">CTR (átkattintási arány)</div><div class="kpi-exp-text">A hirdetéseket látók hány százaléka kattintott. Magasabb = relevánsabb kreatív.</div></div>
+        <div class="kpi-exp-item"><div class="kpi-exp-label">CPM (ezer megjelenés ára)</div><div class="kpi-exp-text">1000 megjelenés ára forintban. Alacsonyabb = hatékonyabb elérés.</div></div>
+        <div class="kpi-exp-item"><div class="kpi-exp-label">CPA (egy vásárlás költsége)</div><div class="kpi-exp-text">Egy vásárlás megszerzésének átlagköltsége. Alacsonyabb = hatékonyabb.</div></div>
         <div class="kpi-exp-item"><div class="kpi-exp-label">Frekvencia</div><div class="kpi-exp-text">Átlagosan hányszor látta ugyanaz a személy a hirdetéseket. 2,0 felett fáradtság kockázata nő.</div></div>
         <div class="kpi-exp-item"><div class="kpi-exp-label">Sessions (GA4)</div><div class="kpi-exp-text">Weboldal látogatások száma. 30 perces inaktivitás után új session indul.</div></div>
         <div class="kpi-exp-item"><div class="kpi-exp-label">Átl. munkamenet</div><div class="kpi-exp-text">Átlagosan ennyi időt töltenek a látogatók az oldalon. Hosszabb idő = érdekesebb tartalom.</div></div>
@@ -538,7 +456,7 @@
   </section>
 
   <footer>
-    <span>Dropline Digital · Nobilezze Club · Napi riport</span>
+    <span>Dropline Digital · Nobilezze Club · Napi riport · 2026-04-14</span>
   </footer>
 </div>
 
@@ -551,10 +469,10 @@ function setView(m){
   });
 }
 (function(){
-  var L=['Ápr 8','Ápr 9','Ápr 10','Ápr 11','Ápr 12','Ápr 13','Ápr 14'];
-  var S=[9236,13913,9463,27012,24456,23600,31790];
-  var SS=[null,null,195,1004,606,424,415];
-  var P=[0,0,1,2,1,0,4];
+  var L=['Ápr 7','Ápr 8','Ápr 9','Ápr 10','Ápr 11','Ápr 12','Ápr 13'];
+  var S=[1587,9236,13913,9463,27012,24456,23600];
+  var SS=[null,null,null,195,1004,606,424];
+  var P=[0,0,0,1,2,1,0];
   var ctx=document.getElementById('trendChart').getContext('2d');
   new Chart(ctx,{
     type:'line',
