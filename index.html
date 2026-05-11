@@ -1,245 +1,1436 @@
 <!DOCTYPE html>
+<!-- DEMO RENDER · 2026-04-14 baseline · Az értékek illusztratívak; éles bekötéskor a daily.sh tölti -->
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="300">
-  <title>Nobilezze Club — Napi Dashboard</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-:root { --cream: #F8F6F2; --gold: #B8965A; --sage: #5C8B78; --terra: #B85C3A; --text: #2C2825; --muted: #7A7370; --border: #E8E4DC; --white: #FFFFFF; }
-body { background: var(--cream); color: var(--text); font-family: "Inter", sans-serif; font-size: 14px; line-height: 1.5; padding: 0 20px 60px; }
-.header { display: flex; align-items: center; justify-content: space-between; padding: 28px 0 20px; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
-.logo { font-family: "Playfair Display", serif; font-size: 20px; font-weight: 700; letter-spacing: 0.04em; color: var(--text); }
-.date-label { font-size: 12px; color: var(--muted); }
-.signal { border-radius: 8px; padding: 14px 20px; margin-bottom: 28px; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 10px; }
-.signal.pozitiv { background: #EAF3EF; color: #2D6B55; border-left: 4px solid var(--sage); }
-.signal.figyelmezteto { background: #FDF0EC; color: #8C3A20; border-left: 4px solid var(--terra); }
-.signal.semleges { background: #F5F3EE; color: #5A5450; border-left: 4px solid #C8C0B0; }
-.toggle-bar { display: flex; gap: 8px; margin-bottom: 20px; }
-.toggle-btn { padding: 7px 20px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--white); color: var(--muted); font-size: 13px; font-family: "Inter", sans-serif; font-weight: 500; cursor: pointer; transition: all 0.2s; }
-.toggle-btn.active { background: var(--text); color: var(--white); border-color: var(--text); }
-.section-title { font-family: "Playfair Display", serif; font-size: 16px; font-weight: 600; color: var(--text); margin-bottom: 14px; }
-.kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 36px; }
-.kpi-card { background: var(--white); border-radius: 10px; padding: 18px 16px 14px; border-top: 3px solid var(--gold); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-.kpi-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
-.kpi-value { font-family: "Playfair Display", serif; font-size: 26px; font-weight: 700; color: var(--text); line-height: 1.1; margin-bottom: 6px; }
-.kpi-delta { font-size: 12px; font-weight: 500; }
-.kpi-delta.pos { color: var(--sage); }
-.kpi-delta.neg { color: var(--terra); }
-.kpi-delta.neu { color: var(--muted); }
-.chart-card { background: var(--white); border-radius: 10px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 36px; }
-.chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.chart-legend { display: flex; gap: 16px; }
-.legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
-.legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 36px; }
-.panel { background: var(--white); border-radius: 10px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-.panel-title { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 16px; }
-.funnel-steps { display: flex; flex-direction: column; gap: 10px; }
-.funnel-step { display: flex; align-items: center; gap: 12px; }
-.funnel-bar-wrap { flex: 1; background: #F0EDE8; border-radius: 4px; height: 8px; overflow: hidden; }
-.funnel-bar { height: 100%; background: var(--gold); border-radius: 4px; }
-.funnel-label { font-size: 13px; color: var(--muted); width: 110px; }
-.funnel-val { font-family: "Playfair Display", serif; font-size: 15px; font-weight: 600; width: 70px; text-align: right; }
-.traffic-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.traffic-label { font-size: 13px; color: var(--text); width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.traffic-bar-wrap { flex: 1; background: #F0EDE8; border-radius: 4px; height: 8px; }
-.traffic-bar { height: 100%; border-radius: 4px; }
-.traffic-pct { font-size: 12px; color: var(--muted); width: 44px; text-align: right; }
-.table-card { background: var(--white); border-radius: 10px; padding: 22px; box-shadow: 0 1px 4px rgba(0,0,0,0.05); margin-bottom: 36px; }
-table { width: 100%; border-collapse: collapse; }
-th { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; padding: 0 12px 10px 0; text-align: left; border-bottom: 1px solid var(--border); }
-td { font-size: 13px; color: var(--text); padding: 10px 12px 10px 0; border-bottom: 1px solid #F0EDE8; }
-td.num { font-family: "Playfair Display", serif; font-weight: 600; }
-td.roas-hi { color: var(--sage); font-weight: 600; font-family: "Playfair Display", serif; }
-.table-scroll { overflow-x: auto; }
-.collapsible-wrap { margin-bottom: 36px; }
-.collapsible-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 14px 20px; background: var(--white); border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-family: "Inter", sans-serif; font-size: 14px; font-weight: 500; color: var(--text); }
-.collapsible-btn .arrow { font-size: 12px; transition: transform 0.2s; }
-.collapsible-btn.open .arrow { transform: rotate(180deg); }
-.collapsible-content { display: none; background: var(--white); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; padding: 20px; }
-.collapsible-content.open { display: block; }
-.kpi-explain { margin-bottom: 14px; }
-.kpi-explain h4 { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.kpi-explain p { font-size: 13px; color: var(--muted); }
-.footer { text-align: center; font-size: 11px; color: var(--muted); margin-top: 20px; }
-@media (max-width: 960px) { .kpi-grid { grid-template-columns: repeat(3, 1fr); } .two-col { grid-template-columns: 1fr; } }
-@media (max-width: 640px) { .kpi-grid { grid-template-columns: repeat(2, 1fr); } .header { flex-direction: column; gap: 6px; align-items: flex-start; } }
-@media (max-width: 380px) { .kpi-grid { grid-template-columns: 1fr; } }</style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="refresh" content="300">
+<title>Nobilezze Club — Executive Dashboard · 2026-04-14</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  :root{
+    /* SURFACE PALETTE — monochrome */
+    --bg-1:#EEF0F3;
+    --bg-2:#DDE0E6;
+    --ink:#14161C;
+    --ink-2:#2C2E36;
+    --ink-3:#4A4D55;
+    --dim:#6B7280;
+    --mute:#9CA3AF;
+    --hairline:rgba(20,22,28,.08);
+    --hairline-strong:rgba(20,22,28,.14);
+
+    /* GLASS */
+    --glass:rgba(255,255,255,.55);
+    --glass-strong:rgba(255,255,255,.82);
+    --glass-edge:rgba(255,255,255,.72);
+    --glass-shadow:0 1px 0 rgba(255,255,255,.55) inset, 0 1px 2px rgba(20,22,28,.04), 0 12px 28px -14px rgba(20,22,28,.18);
+    --glass-shadow-hover:0 1px 0 rgba(255,255,255,.70) inset, 0 2px 4px rgba(20,22,28,.05), 0 22px 44px -18px rgba(20,22,28,.28);
+
+    /* DARK HERO */
+    --dark-grad:linear-gradient(135deg,#1A1C22 0%,#0E1014 100%);
+    --dark-edge:rgba(255,255,255,.10);
+    --dark-shadow:0 1px 0 rgba(255,255,255,.06) inset, 0 12px 32px -16px rgba(0,0,0,.45);
+
+    /* ALERTS */
+    --warn:#8B5A1F;
+    --bad:#9F1F1F;
+
+    --radius:18px;
+    --radius-sm:12px;
+    --serif:'Fraunces',Georgia,serif;
+    --sans:'Instrument Sans','Instrument Sans Fallback',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+    --mono:'Instrument Sans',ui-monospace,SFMono-Regular,monospace;
+  }
+  html,body{
+    margin:0;padding:0;color:var(--ink);font-family:var(--sans);line-height:1.5;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    min-height:100vh;
+    background:
+      radial-gradient(1200px 600px at 8% 0%, #F5F7FA 0%, transparent 50%),
+      radial-gradient(900px 500px at 92% 12%, #E1E4EA 0%, transparent 55%),
+      linear-gradient(180deg,#ECEEF1 0%,#DEE1E6 100%);
+    background-attachment:fixed;
+    font-feature-settings:"ss01","cv11";
+  }
+  body::before{
+    content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:
+      radial-gradient(circle at 18% 22%, rgba(20,22,28,.04) 0, transparent 40%),
+      radial-gradient(circle at 78% 78%, rgba(20,22,28,.045) 0, transparent 45%);
+  }
+  .wrap{max-width:1360px;margin:0 auto;padding:32px 28px 80px;position:relative;z-index:1}
+
+  /* PAGE LOAD ANIMATION */
+  @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .anim{opacity:0;animation:fadeUp .55s cubic-bezier(.22,.61,.36,1) forwards}
+  .anim-1{animation-delay:.05s}.anim-2{animation-delay:.10s}.anim-3{animation-delay:.15s}
+  .anim-4{animation-delay:.20s}.anim-5{animation-delay:.28s}.anim-6{animation-delay:.36s}
+  .anim-7{animation-delay:.44s}.anim-8{animation-delay:.52s}.anim-9{animation-delay:.60s}
+
+  /* HEADER */
+  header{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;
+    padding:18px 24px;margin-bottom:20px;
+    background:var(--glass);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius);
+    box-shadow:var(--glass-shadow);
+    flex-wrap:wrap;
+  }
+  .brand{display:flex;flex-direction:column;gap:2px}
+  .brand-kicker{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+  .brand-title{font-family:var(--serif);font-size:28px;font-weight:500;letter-spacing:-.022em;line-height:1.05;font-variation-settings:"opsz" 80,"SOFT" 50}
+  .meta-info{font-size:12px;color:var(--dim);text-align:right;line-height:1.5}
+  .meta-info strong{color:var(--ink);display:block;font-size:14px;font-weight:600;letter-spacing:-.005em}
+  .meta-info .live-dot{display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--ink);margin-right:6px;animation:livePulse 2.4s infinite}
+  @keyframes livePulse{0%,100%{opacity:1}50%{opacity:.35}}
+
+  /* FILTER BAR */
+  .filter-bar{
+    display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+    padding:14px 18px;margin-bottom:24px;
+    background:var(--glass);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius);
+    box-shadow:var(--glass-shadow);
+    position:relative;z-index:10;
+  }
+  .filter-label{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-right:2px}
+  .chip-row{display:inline-flex;background:rgba(20,22,28,.04);border-radius:99px;padding:3px;gap:0;flex-wrap:nowrap}
+  .chip-row .chip{
+    border:none;background:transparent;padding:8px 14px;font-size:12.5px;
+    font-family:var(--sans);font-weight:500;color:var(--ink-3);cursor:pointer;
+    transition:all .2s ease;min-height:34px;border-radius:99px;letter-spacing:-.005em;
+    white-space:nowrap;
+  }
+  .chip-row .chip.active{background:var(--ink);color:#fff;font-weight:600;box-shadow:0 1px 2px rgba(20,22,28,.18)}
+  .chip-row .chip:not(.active):hover{color:var(--ink);background:rgba(20,22,28,.04)}
+  .filter-divider{width:1px;height:24px;background:var(--hairline-strong)}
+  .compare-select{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 12px;border-radius:99px;
+    background:rgba(20,22,28,.04);border:1px solid transparent;
+    font-size:12px;color:var(--ink-2);cursor:pointer;font-family:var(--sans);font-weight:500;
+    transition:background .2s;min-height:34px;
+  }
+  .compare-select:hover{background:rgba(20,22,28,.08)}
+  .compare-select svg{width:10px;height:10px}
+  .compare-select strong{font-weight:600;color:var(--ink);margin-left:4px}
+
+  .range-pop{
+    position:absolute;top:calc(100% + 8px);right:0;
+    background:var(--glass-strong);backdrop-filter:blur(28px) saturate(180%);-webkit-backdrop-filter:blur(28px) saturate(180%);
+    border:1px solid var(--glass-edge);border-radius:14px;
+    padding:16px;min-width:280px;box-shadow:var(--glass-shadow-hover);
+    display:none;flex-direction:column;gap:12px;
+  }
+  .range-pop.open{display:flex}
+  .range-pop label{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);font-weight:600}
+  .range-pop input[type="date"]{
+    width:100%;padding:8px 10px;border:1px solid var(--hairline-strong);border-radius:8px;
+    font-family:var(--sans);font-size:13px;color:var(--ink);background:#fff;
+  }
+  .range-quick{display:flex;flex-wrap:wrap;gap:6px}
+  .range-quick button{
+    border:1px solid var(--hairline);background:rgba(255,255,255,.6);
+    padding:6px 11px;font-size:11.5px;border-radius:99px;cursor:pointer;
+    font-family:var(--sans);font-weight:500;color:var(--ink-3);
+  }
+  .range-quick button:hover{border-color:var(--ink);color:var(--ink)}
+  .range-apply{
+    padding:9px 14px;border:none;background:var(--ink);color:#fff;
+    border-radius:8px;font-family:var(--sans);font-weight:600;font-size:13px;
+    cursor:pointer;
+  }
+
+  /* BANNER */
+  .banner{
+    display:flex;align-items:flex-start;gap:14px;
+    background:var(--glass);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius);
+    padding:18px 22px;margin-bottom:20px;
+    box-shadow:var(--glass-shadow);
+  }
+  .banner-dot{
+    flex-shrink:0;width:8px;height:8px;border-radius:99px;background:var(--ink);margin-top:8px;
+    box-shadow:0 0 0 4px rgba(20,22,28,.08);animation:bannerPulse 3s ease-in-out 2;
+  }
+  @keyframes bannerPulse{0%,100%{box-shadow:0 0 0 4px rgba(20,22,28,.08)}50%{box-shadow:0 0 0 8px rgba(20,22,28,.05)}}
+  .banner-text{font-size:14.5px;line-height:1.6;color:var(--ink-2);letter-spacing:-.005em}
+  .banner-text b{font-weight:700;color:var(--ink)}
+
+  /* GRID */
+  .grid{display:grid;gap:16px;margin-bottom:16px}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-2{grid-template-columns:1fr 1fr}
+  .grid-8-4{grid-template-columns:2fr 1fr}
+  .grid-spend{grid-template-columns:repeat(3,1fr)}
+
+  /* GLASS CARD */
+  .card{
+    background:var(--glass);backdrop-filter:blur(28px) saturate(160%);-webkit-backdrop-filter:blur(28px) saturate(160%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--glass-shadow);
+    position:relative;overflow:hidden;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card:hover{transform:translateY(-2px);box-shadow:var(--glass-shadow-hover)}
+  .card-strong{background:var(--glass-strong)}
+  .card-flat{transition:none}
+  .card-flat:hover{transform:none;box-shadow:var(--glass-shadow)}
+
+  /* DARK HERO CARD */
+  .card-dark{
+    background:var(--dark-grad);color:#fff;
+    border:1px solid var(--dark-edge);border-radius:var(--radius);
+    padding:22px;box-shadow:var(--dark-shadow);position:relative;overflow:hidden;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .card-dark:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.08) inset, 0 18px 40px -16px rgba(0,0,0,.55)}
+  .card-dark::before{
+    content:'';position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(380px 200px at 10% 0%, rgba(255,255,255,.06) 0%, transparent 60%);
+  }
+
+  /* KPI HERO */
+  .kpi-h{position:relative}
+  .kpi-h-label{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--ink-3);margin-bottom:14px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+  .card-dark .kpi-h-label{color:rgba(255,255,255,.62)}
+  .kpi-h-value{font-family:var(--serif);font-size:40px;font-weight:500;letter-spacing:-.025em;line-height:1.02;font-variation-settings:"opsz" 96,"SOFT" 30}
+  .kpi-h-sub{font-size:12px;color:var(--dim);margin-top:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .card-dark .kpi-h-sub{color:rgba(255,255,255,.58)}
+  .kpi-h-delta{
+    display:inline-flex;align-items:center;gap:4px;
+    padding:3px 9px;background:rgba(20,22,28,.06);border-radius:99px;
+    font-size:11px;font-weight:600;color:var(--ink);letter-spacing:-.005em;
+  }
+  .card-dark .kpi-h-delta{background:rgba(255,255,255,.10);color:#fff}
+  .kpi-h-delta.dn{color:var(--ink-3)}
+  .card-dark .kpi-h-delta.dn{color:rgba(255,255,255,.72)}
+
+  /* SPARKLINE under hero KPI */
+  .spark{display:block;margin-top:14px;width:100%;height:34px}
+  .spark-line{fill:none;stroke:var(--ink);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  .spark-area{fill:rgba(20,22,28,.07);stroke:none}
+  .spark-prev{fill:none;stroke:var(--mute);stroke-width:1.2;stroke-dasharray:3 3;opacity:.7}
+  .spark-dot{fill:var(--ink)}
+  .card-dark .spark-line{stroke:#fff}
+  .card-dark .spark-area{fill:rgba(255,255,255,.10)}
+  .card-dark .spark-prev{stroke:rgba(255,255,255,.45)}
+  .card-dark .spark-dot{fill:#fff}
+
+  /* KPI SECONDARY */
+  .kpi-s{
+    background:var(--glass);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius-sm);
+    padding:16px 16px 14px;box-shadow:var(--glass-shadow);position:relative;
+    transition:transform .2s ease;
+  }
+  .kpi-s:hover{transform:translateY(-1px)}
+  .kpi-s-label{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);font-weight:600;margin-bottom:8px}
+  .kpi-s-value{font-family:var(--serif);font-size:22px;font-weight:500;letter-spacing:-.018em;line-height:1.1;color:var(--ink);font-variation-settings:"opsz" 72}
+  .kpi-s-delta{font-size:11px;margin-top:6px;font-weight:500;color:var(--dim)}
+  .kpi-s-delta strong{color:var(--ink);font-weight:600}
+
+  /* SPEND OVERVIEW */
+  .spend-card{
+    background:var(--glass);backdrop-filter:blur(24px) saturate(150%);-webkit-backdrop-filter:blur(24px) saturate(150%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius-sm);
+    padding:18px 20px;box-shadow:var(--glass-shadow);
+    transition:transform .2s ease;
+  }
+  .spend-card:hover{transform:translateY(-1px)}
+  .spend-row{display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+  .spend-label{font-size:10.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--dim);font-weight:600;margin-bottom:6px}
+  .spend-value{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1.05;color:var(--ink);font-variation-settings:"opsz" 80}
+  .spend-sub{font-size:11.5px;color:var(--dim);margin-top:8px;line-height:1.45}
+  .spend-sub b{color:var(--ink);font-weight:600}
+  .spend-mini{margin-top:10px;display:flex;gap:2px;height:18px;align-items:flex-end}
+  .spend-mini-bar{flex:1;background:var(--ink);opacity:.18;border-radius:1.5px;min-height:3px;transition:opacity .2s}
+  .spend-mini-bar.peak{opacity:.85}
+  .spend-mini-bar:hover{opacity:1}
+
+  /* SECTION HEADER */
+  .sec-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:18px;gap:10px;flex-wrap:wrap}
+  .sec-title{font-family:var(--serif);font-size:19px;font-weight:500;letter-spacing:-.018em;color:var(--ink);font-variation-settings:"opsz" 72,"SOFT" 30}
+  .sec-sub{font-size:11px;color:var(--mute);font-weight:500;letter-spacing:.06em;text-transform:uppercase}
+
+  /* CHART */
+  .chart-wrap{position:relative;height:260px}
+  canvas{display:block}
+
+  /* TOP PRODUCTS */
+  .product-list{display:flex;flex-direction:column;gap:8px}
+  .product-row{
+    display:flex;align-items:center;justify-content:space-between;gap:12px;
+    padding:12px 14px;border-radius:12px;
+    background:rgba(20,22,28,.025);border:1px solid rgba(20,22,28,.04);
+    transition:background .15s,transform .2s;
+  }
+  .product-row:hover{background:rgba(20,22,28,.05);transform:translateX(2px)}
+  .product-rank{
+    flex-shrink:0;width:26px;height:26px;border-radius:99px;
+    background:var(--ink);color:#fff;font-size:11px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;font-family:var(--sans);letter-spacing:-.01em;
+  }
+  .product-info{flex:1;min-width:0}
+  .product-name{font-size:13.5px;font-weight:600;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:-.005em}
+  .product-stock{font-size:11px;color:var(--dim);margin-top:3px;display:flex;align-items:center;gap:8px}
+  .stock-pill{display:inline-flex;align-items:center;gap:4px;padding:2px 7px;border-radius:99px;font-size:10px;font-weight:600;font-variant-numeric:tabular-nums}
+  .stock-ok{background:rgba(20,22,28,.06);color:var(--ink-3)}
+  .stock-low{background:rgba(159,31,31,.10);color:var(--bad)}
+  .stock-warn{background:rgba(139,90,31,.12);color:var(--warn)}
+  .product-num{text-align:right;flex-shrink:0;font-family:var(--serif);font-size:15.5px;font-weight:500;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+  .product-qty{font-size:11px;color:var(--dim);margin-top:2px;font-weight:500;font-family:var(--sans)}
+
+  /* CUSTOMER MIX */
+  .mix-wrap{display:flex;flex-direction:column;gap:18px}
+  .mix-bar-wrap{display:flex;align-items:center;gap:14px}
+  .mix-donut{width:100px;height:100px;flex-shrink:0;position:relative}
+  .mix-donut svg{transform:rotate(-90deg)}
+  .mix-donut-center{
+    position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .mix-donut-num{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--ink);line-height:1;letter-spacing:-.02em;font-variation-settings:"opsz" 80}
+  .mix-donut-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px;font-weight:600}
+  .mix-legend{flex:1;display:flex;flex-direction:column;gap:8px}
+  .mix-leg-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px}
+  .mix-leg-name{color:var(--ink-2);display:flex;align-items:center;gap:8px}
+  .mix-leg-swatch{width:10px;height:10px;border-radius:3px}
+  .mix-leg-val{font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+  .mix-stat{padding-top:14px;border-top:1px solid var(--hairline);font-size:12.5px;color:var(--dim);line-height:1.6}
+  .mix-stat b{color:var(--ink);font-weight:600}
+
+  /* FUNNEL 3D */
+  .funnel{display:flex;flex-direction:column;align-items:stretch;gap:14px}
+  .funnel-svg{display:block;width:100%;height:auto;overflow:visible;margin:2px auto 0;max-width:460px;align-self:center}
+  .funnel-svg text{font-family:var(--sans)}
+  .funnel-svg text.fl-num{font-family:var(--serif);font-size:24px;font-weight:500;letter-spacing:-.02em;font-variation-settings:"opsz" 80}
+  .funnel-svg text.fl-lbl{font-family:var(--sans);font-size:9.5px;font-weight:600;letter-spacing:.18em}
+  .funnel-svg text.fd-num{font-family:var(--serif);font-size:14px;font-weight:500;letter-spacing:-.01em;font-variation-settings:"opsz" 60}
+  .funnel-svg text.fd-pct{font-family:var(--sans);font-size:10px;font-weight:600;letter-spacing:.02em}
+  .funnel-svg .layer-group{transition:filter .25s ease}
+  .funnel-svg .layer-group:hover{filter:brightness(1.28) drop-shadow(0 4px 12px rgba(20,22,28,.25))}
+  @keyframes funnelDrop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+  .funnel-svg .stage-1{animation:funnelDrop .6s cubic-bezier(.22,.61,.36,1) .10s backwards;transform-box:fill-box}
+  .funnel-svg .stage-2{animation:funnelDrop .6s cubic-bezier(.22,.61,.36,1) .24s backwards;transform-box:fill-box}
+  .funnel-svg .stage-3{animation:funnelDrop .6s cubic-bezier(.22,.61,.36,1) .38s backwards;transform-box:fill-box}
+  .funnel-svg .stage-4{animation:funnelDrop .6s cubic-bezier(.22,.61,.36,1) .52s backwards;transform-box:fill-box}
+  .funnel-svg .drop-g{animation:funnelDrop .45s cubic-bezier(.22,.61,.36,1) backwards;transform-box:fill-box}
+  .funnel-svg .drop-1{animation-delay:.20s}
+  .funnel-svg .drop-2{animation-delay:.34s}
+  .funnel-svg .drop-3{animation-delay:.48s}
+  .funnel-summary{display:flex;width:100%;gap:14px;padding:14px 0 0;border-top:1px solid var(--hairline)}
+  .fs-item{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0}
+  .fs-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.16em;color:var(--dim);font-weight:600}
+  .fs-value{font-family:var(--serif);font-size:15px;font-weight:500;color:var(--ink);letter-spacing:-.012em;font-variation-settings:"opsz" 60;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .funnel-note{font-size:11.5px;color:var(--mute);text-align:left;line-height:1.5;width:100%;margin-top:0}
+
+  /* SOURCE LIST */
+  .src-list{display:flex;flex-direction:column;gap:10px}
+  .src-row{display:flex;align-items:center;gap:12px}
+  .src-name{min-width:96px;font-size:12.5px;color:var(--ink-2);font-weight:500;flex-shrink:0;letter-spacing:-.005em}
+  .src-bar-bg{flex:1;height:6px;background:rgba(20,22,28,.06);border-radius:99px;overflow:hidden}
+  .src-bar{height:100%;background:linear-gradient(90deg,var(--ink) 0%,var(--ink-3) 100%);border-radius:99px}
+  .src-pct{min-width:38px;text-align:right;font-size:11.5px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+
+  /* TABLES with INLINE VIZ */
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;padding:0 4px}
+  table{width:100%;border-collapse:separate;border-spacing:0;font-size:13px;min-width:720px}
+  th,td{text-align:left;padding:14px 14px;border-bottom:1px solid var(--hairline);white-space:nowrap;font-variant-numeric:tabular-nums;letter-spacing:-.005em;position:relative}
+  th{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);font-weight:600;background:rgba(20,22,28,.025);position:sticky;top:0;z-index:1}
+  td.num{text-align:right;font-weight:500}
+  td.na{color:var(--mute);text-align:right}
+  tr:last-child td{border-bottom:none}
+  tr.row-today td{font-weight:600;color:var(--ink);background:rgba(20,22,28,.04);position:relative}
+  tr.row-today td:first-child::before{content:'';position:absolute;left:0;top:6px;bottom:6px;width:3px;background:var(--ink);border-radius:0 2px 2px 0}
+  tr:hover td:not(:first-child){background:rgba(20,22,28,.018)}
+
+  /* inline horizontal bar in numeric cells */
+  .cell-bar{position:relative;display:inline-block;width:100%;text-align:right}
+  .cell-bar-track{position:absolute;left:auto;right:0;top:50%;transform:translateY(-50%);height:4px;background:rgba(20,22,28,.07);border-radius:99px;width:80px;overflow:hidden;pointer-events:none}
+  .cell-bar-fill{position:absolute;right:0;top:0;height:100%;background:var(--ink);border-radius:99px}
+  .cell-num-with-bar{display:inline-block;padding-right:88px;min-width:140px}
+
+  /* dot plot for order count */
+  .dots{display:inline-flex;gap:3px;align-items:center;justify-content:flex-end;min-width:48px}
+  .dot{width:7px;height:7px;border-radius:99px;background:var(--ink)}
+  .dot-mute{background:rgba(20,22,28,.15)}
+  .dot-num{font-size:10.5px;color:var(--dim);margin-left:5px;font-weight:600}
+
+  /* ROAS heat cell */
+  .roas-cell{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
+  .roas-chip{padding:3px 9px;border-radius:6px;font-size:11.5px;font-weight:600;color:#fff;font-variant-numeric:tabular-nums;letter-spacing:-.005em;background:rgba(20,22,28,.85)}
+  .roas-chip.r1{background:rgba(20,22,28,.30)}
+  .roas-chip.r2{background:rgba(20,22,28,.50)}
+  .roas-chip.r3{background:rgba(20,22,28,.70)}
+  .roas-chip.r4{background:rgba(20,22,28,.88)}
+  .roas-chip.r5{background:#0E1014}
+
+  /* conv rate mini bar */
+  .cr-cell{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end;min-width:90px}
+  .cr-bar{width:48px;height:5px;background:rgba(20,22,28,.07);border-radius:99px;overflow:hidden}
+  .cr-fill{height:100%;background:var(--ink);border-radius:99px}
+
+  .badge{
+    display:inline-block;background:var(--ink);color:#fff;font-size:9px;
+    padding:2px 7px;border-radius:99px;margin-left:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;vertical-align:middle;
+  }
+
+  /* PILLS */
+  .pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:99px;font-size:10.5px;font-weight:600;letter-spacing:.02em;line-height:1}
+  .pill-soft{background:rgba(20,22,28,.07);color:var(--ink-3)}
+
+  /* NARRATIVE */
+  .narr{font-size:14.5px;line-height:1.75;color:var(--ink-2);letter-spacing:-.005em}
+  .narr p{margin:0 0 12px}.narr p:last-child{margin:0}
+
+  /* COLLAPSIBLE */
+  details summary{cursor:pointer;font-size:13.5px;color:var(--ink);font-weight:600;padding:6px 0;list-style:none;user-select:none;display:flex;align-items:center;gap:10px;letter-spacing:-.005em}
+  details summary::before{content:'+';width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:#fff;border-radius:99px;font-size:14px;font-weight:500}
+  details[open] summary::before{content:'−'}
+  .kpi-explainer{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-top:18px}
+  .kpi-exp-item{background:rgba(20,22,28,.035);border-radius:12px;padding:14px 16px;font-size:13px;border:1px solid rgba(20,22,28,.04)}
+  .kpi-exp-label{font-weight:700;margin-bottom:4px;color:var(--ink);letter-spacing:-.005em}
+  .kpi-exp-text{color:var(--dim);line-height:1.55;font-size:12.5px}
+
+  /* FOOTER */
+  footer{
+    margin-top:48px;padding:18px 22px;font-size:12px;color:var(--dim);
+    display:flex;justify-content:space-between;align-items:center;gap:12px;
+    background:var(--glass);backdrop-filter:blur(20px) saturate(140%);-webkit-backdrop-filter:blur(20px) saturate(140%);
+    border:1px solid var(--glass-edge);border-radius:var(--radius);
+    flex-wrap:wrap;
+  }
+  footer .src-list-tags{display:flex;gap:8px;flex-wrap:wrap}
+  footer .src-tag{font-size:10.5px;padding:4px 10px;background:rgba(20,22,28,.06);border-radius:99px;color:var(--ink-2);font-weight:500;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px}
+  footer .src-tag::before{content:'';width:6px;height:6px;border-radius:99px;background:var(--ink-3)}
+
+  /* VIEW SWITCH */
+  [data-v="w"]{display:none}
+  body.w [data-v="d"]{display:none}
+  body.w [data-v="w"]{display:block}
+  body.w .grid-4[data-v="w"]{display:grid}
+  body.w .grid-4[data-v="d"]{display:none}
+  body.w .product-list[data-v="w"]{display:flex}
+  body.w .product-list[data-v="d"]{display:none}
+  body.w .funnel[data-v="w"]{display:flex}
+  body.w .funnel[data-v="d"]{display:none}
+  body.w .mix-wrap[data-v="w"]{display:flex}
+  body.w .mix-wrap[data-v="d"]{display:none}
+  body.w .src-list[data-v="w"]{display:flex}
+  body.w .src-list[data-v="d"]{display:none}
+  .grid-4[data-v="w"]{display:none}
+  .product-list[data-v="w"]{display:none}
+  .funnel[data-v="w"]{display:none}
+  .mix-wrap[data-v="w"]{display:none}
+  .src-list[data-v="w"]{display:none}
+
+  /* RESPONSIVE */
+  @media(max-width:1100px){
+    .grid-4{grid-template-columns:repeat(2,1fr)}
+    .grid-3{grid-template-columns:repeat(2,1fr)}
+    .grid-8-4{grid-template-columns:1fr}
+    .grid-spend{grid-template-columns:repeat(3,1fr)}
+  }
+  @media(max-width:760px){
+    .grid-spend{grid-template-columns:1fr}
+  }
+  @media(max-width:640px){
+    .wrap{padding:20px 14px 60px}
+    header{padding:14px 16px}
+    .brand-title{font-size:22px}
+    .meta-info{text-align:left}
+    .filter-bar{padding:12px 14px;gap:8px}
+    .chip-row .chip{padding:7px 11px;font-size:11.5px}
+    .grid-4{grid-template-columns:1fr 1fr;gap:10px}
+    .grid-2,.grid-3{grid-template-columns:1fr}
+    .card,.card-dark{padding:16px;border-radius:14px}
+    .kpi-h-value{font-size:30px}
+    .kpi-s-value{font-size:19px}
+    .sec-title{font-size:17px}
+    .chart-wrap{height:220px}
+    .mix-donut{width:84px;height:84px}
+    .mix-donut-num{font-size:20px}
+    table{font-size:12px}
+    th,td{padding:10px 10px}
+    .cell-num-with-bar{padding-right:64px;min-width:96px}
+    .cell-bar-track{width:56px}
+  }
+  @media(max-width:420px){
+    .grid-4{grid-template-columns:1fr}
+  }
+</style>
 </head>
 <body>
-<div style="max-width:1200px;margin:0 auto;">
+<div class="wrap">
 
-<div class="header">
-  <div>
-    <div class="logo">NOBILEZZE CLUB</div>
-    <div class="date-label">Napi riport · 2026. május 10. (vasárnap)</div>
-  </div>
-  <div class="date-label" style="text-align:right;">Generálva: 2026. május 11. 06:30</div>
-</div>
+  <!-- ============ HEADER ============ -->
+  <header class="anim anim-1">
+    <div class="brand">
+      <span class="brand-kicker">Nobilezze Club</span>
+      <div class="brand-title">Executive Dashboard</div>
+    </div>
+    <div class="meta-info">
+      <strong><span class="live-dot"></span>2026. április 14., kedd</strong>
+      Frissítve: 09:00 · Auto-refresh 5 perc
+    </div>
+  </header>
 
-<div class="signal pozitiv">
-  <span>•</span>
-  <span>Tegnap (vasárnap) a hirdetésekből 9 vásárlás érkezett 100 959 Ft költés mellett. A megtérülés 4,17×, ami a heti átlag (4,66×) közelében van. A weboldalra 1 699 látogató érkezett — a héten ez a legmagasabb látogatószám. Összességében erős, kiegyensúlyozott nap.</span>
-</div>
+  <!-- ============ FILTER BAR ============ -->
+  <div class="filter-bar anim anim-2">
+    <span class="filter-label">Időszak</span>
+    <div class="chip-row" id="periodChips">
+      <button class="chip active" data-period="d">Tegnap</button>
+      <button class="chip" data-period="t">Ma</button>
+      <button class="chip" data-period="w">Elmúlt 7 nap</button>
+      <button class="chip" data-period="m30">Elmúlt 30 nap</button>
+      <button class="chip" data-period="mtd">Ez a hónap</button>
+      <button class="chip" data-period="custom" id="customBtn">Egyedi</button>
+    </div>
 
-<h2 class="section-title">Pillanatkép</h2>
-<div class="toggle-bar">
-  <button class="toggle-btn active" onclick="showView('napi', this)">Tegnapi</button>
-  <button class="toggle-btn" onclick="showView('heti', this)">Elmúlt 7 nap</button>
-</div>
-<div class="kpi-grid" id="view-napi"><div class="kpi-card"><div class="kpi-label">Költés</div><div class="kpi-value">100 959 Ft</div><span class="kpi-delta pos">▲ 22,6% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">ROAS</div><div class="kpi-value">4,17×</div><span class="kpi-delta neg">▼ 10,6% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Vásárlások (Meta)</div><div class="kpi-value">9</div><span class="kpi-delta pos">▲ 12,5% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Bevétel (Meta)</div><div class="kpi-value">420 709 Ft</div><span class="kpi-delta pos">▲ 9,6% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Ügyfélszerzési ktg.</div><div class="kpi-value">11 218 Ft</div><span class="kpi-delta neg">▲ 9,0% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Átkattintási arány</div><div class="kpi-value">4,4%</div><span class="kpi-delta neg">▼ 7,6% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Ezer megjelenés ára</div><div class="kpi-value">1 449 Ft</div><span class="kpi-delta pos">▼ 17,7% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Elérés</div><div class="kpi-value">50 488</div><span class="kpi-delta pos">▲ 56,1% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Frekvencia</div><div class="kpi-value">1,38</div><span class="kpi-delta pos">▼ 10,2% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Látogatók (GA4)</div><div class="kpi-value">1 699</div><span class="kpi-delta pos">▲ 14,6% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Átl. munkamenet</div><div class="kpi-value">3:41 perc</div><span class="kpi-delta pos">▲ 71,6% a 7n átlagnál</span></div><div class="kpi-card"><div class="kpi-label">Tranzakciók (GA4)</div><div class="kpi-value">8</div><span class="kpi-delta neu">▲ 0,0% a 7n átlagnál</span></div></div>
-<div class="kpi-grid" id="view-heti" style="display:none;"><div class="kpi-card"><div class="kpi-label">Összes Költés (7n)</div><div class="kpi-value">576 237 Ft</div><span class="kpi-delta neu">máj. 4. – máj. 10.</span></div><div class="kpi-card"><div class="kpi-label">Súlyozott ROAS (7n)</div><div class="kpi-value">4,66×</div><span class="kpi-delta neu">teljes időszak</span></div><div class="kpi-card"><div class="kpi-label">Összes Vásárlás (Meta)</div><div class="kpi-value">56</div><span class="kpi-delta neu">napi átlag: 8,0</span></div><div class="kpi-card"><div class="kpi-label">Összes Bevétel (Meta)</div><div class="kpi-value">2 686 825 Ft</div><span class="kpi-delta neu">teljes időszak</span></div><div class="kpi-card"><div class="kpi-label">Átl. ügyfélszerzési ktg.</div><div class="kpi-value">10 290 Ft</div><span class="kpi-delta neu">költés / vásárlás</span></div><div class="kpi-card"><div class="kpi-label">Átl. CTR (7n)</div><div class="kpi-value">4,7%</div><span class="kpi-delta neu">7 nap átlag</span></div><div class="kpi-card"><div class="kpi-label">Átl. CPM (7n)</div><div class="kpi-value">1 709 Ft</div><span class="kpi-delta neu">7 nap súlyozott</span></div><div class="kpi-card"><div class="kpi-label">Átl. Elérés (7n)</div><div class="kpi-value">32 336</div><span class="kpi-delta neu">napi átlag</span></div><div class="kpi-card"><div class="kpi-label">Átl. Frekvencia (7n)</div><div class="kpi-value">1,54</div><span class="kpi-delta neu">7 nap átlag</span></div><div class="kpi-card"><div class="kpi-label">Összes Látogató (GA4)</div><div class="kpi-value">10 378</div><span class="kpi-delta neu">napi átlag: 1 483</span></div><div class="kpi-card"><div class="kpi-label">Összes Tranzakció (GA4)</div><div class="kpi-value">56</div><span class="kpi-delta neu">napi átlag: 8,0</span></div><div class="kpi-card"><div class="kpi-label">Összes Bevétel (GA4)</div><div class="kpi-value">2 637 394 Ft</div><span class="kpi-delta neu">teljes időszak</span></div></div>
+    <div class="filter-divider"></div>
 
-<h2 class="section-title">7 napos trend</h2>
-<div class="chart-card">
-  <div class="chart-header">
-    <span style="font-size:13px;color:var(--muted);">Napi adatok · máj. 4. – máj. 10.</span>
-    <div class="chart-legend">
-      <div class="legend-item"><div class="legend-dot" style="background:#B8965A;"></div>Költés</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#5C8B78;"></div>Látogatók</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#B85C3A;"></div>Vásárlás (Meta)</div>
+    <span class="filter-label">Hasonlítva</span>
+    <button class="compare-select" id="compareBtn">
+      <strong id="compareLabel">Előző hasonló időszak</strong>
+      <svg viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
+
+    <!-- Custom range popover -->
+    <div class="range-pop" id="rangePop">
+      <div>
+        <label>Mettől</label>
+        <input type="date" id="rangeFrom" value="2026-04-08">
+      </div>
+      <div>
+        <label>Meddig</label>
+        <input type="date" id="rangeTo" value="2026-04-14">
+      </div>
+      <div class="range-quick">
+        <button onclick="quickRange('w1')">Múlt hét</button>
+        <button onclick="quickRange('m1')">Múlt hónap</button>
+        <button onclick="quickRange('q1')">Előző negyedév</button>
+        <button onclick="quickRange('y1')">Tavaly ugyanaz</button>
+      </div>
+      <button class="range-apply" onclick="applyRange()">Alkalmaz</button>
     </div>
   </div>
-  <canvas id="trendChart" height="80"></canvas>
-</div>
 
-<div class="two-col">
-  <div class="panel">
-    <div class="panel-title">Webshop tölcsér · máj. 10.</div>
-    <div class="funnel-steps">
-      <div class="funnel-step">
-        <div class="funnel-label">Látogatók</div>
-        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:100%;"></div></div>
-        <div class="funnel-val">1 699</div>
+  <!-- ============ DAILY SIGNAL ============ -->
+  <div class="banner anim anim-3" data-v="d">
+    <div class="banner-dot"></div>
+    <div class="banner-text">
+      <b>Kiváló nap.</b> Tegnap 5 rendelés érkezett 312&nbsp;400&nbsp;Ft értékben (Shopify), valódi ROAS&nbsp;9,83×. A Meta pixel 4 vásárlást regisztrált, az eltérés <b>1 rendelés (≈20%)</b> — pixel audit javasolt. A látogatók átlagosan 1 perc 58 másodpercet töltöttek az oldalon.
+    </div>
+  </div>
+  <div class="banner anim anim-3" data-v="w">
+    <div class="banner-dot"></div>
+    <div class="banner-text">
+      <b>Erős hét.</b> Az elmúlt 7 napban 11 rendelés érkezett 642&nbsp;850&nbsp;Ft értékben (Shopify), valódi heti ROAS&nbsp;4,61×. Visszatérő vásárló arány 36% — a klub-effektus erősödik.
+    </div>
+  </div>
+
+  <!-- ============ HERO KPI ROW ============ -->
+  <div class="grid grid-4 anim anim-4" data-v="d">
+    <div class="card-dark kpi-h">
+      <div class="kpi-h-label">Bevétel · Shopify</div>
+      <div class="kpi-h-value">312 400 Ft</div>
+      <div class="kpi-h-sub"><span class="kpi-h-delta">▲ +44%</span> 7&nbsp;napi átlag</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <path class="spark-prev" d="M0,28 L33,26 L66,24 L100,18 L133,21 L166,15 L200,12"/>
+        <path class="spark-area" d="M0,32 L33,30 L66,30 L100,18 L133,26 L166,25 L200,4 L200,34 L0,34 Z"/>
+        <path class="spark-line" d="M0,32 L33,30 L66,30 L100,18 L133,26 L166,25 L200,4"/>
+        <circle class="spark-dot" cx="200" cy="4" r="2.5"/>
+      </svg>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Rendelések</div>
+      <div class="kpi-h-value">5</div>
+      <div class="kpi-h-sub"><span class="kpi-h-delta">▲ +213%</span> 7d átl. 1,6&nbsp;/&nbsp;nap</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <path class="spark-prev" d="M0,28 L33,26 L66,28 L100,22 L133,24 L166,20 L200,18"/>
+        <path class="spark-area" d="M0,32 L33,30 L66,28 L100,22 L133,26 L166,28 L200,4 L200,34 L0,34 Z"/>
+        <path class="spark-line" d="M0,32 L33,30 L66,28 L100,22 L133,26 L166,28 L200,4"/>
+        <circle class="spark-dot" cx="200" cy="4" r="2.5"/>
+      </svg>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Valódi ROAS</div>
+      <div class="kpi-h-value">9,83×</div>
+      <div class="kpi-h-sub">Shopify bevétel ÷ Meta költés</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <path class="spark-prev" d="M0,22 L33,24 L66,20 L100,18 L133,16 L166,18 L200,14"/>
+        <path class="spark-area" d="M0,28 L33,30 L66,28 L100,16 L133,22 L166,24 L200,4 L200,34 L0,34 Z"/>
+        <path class="spark-line" d="M0,28 L33,30 L66,28 L100,16 L133,22 L166,24 L200,4"/>
+        <circle class="spark-dot" cx="200" cy="4" r="2.5"/>
+      </svg>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Átlagos kosár</div>
+      <div class="kpi-h-value">62 480 Ft</div>
+      <div class="kpi-h-sub"><span class="kpi-h-delta dn">▲ +6%</span> 7d átl. 58&nbsp;820&nbsp;Ft</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <path class="spark-prev" d="M0,18 L33,20 L66,22 L100,18 L133,16 L166,18 L200,14"/>
+        <path class="spark-area" d="M0,18 L33,16 L66,20 L100,12 L133,16 L166,14 L200,10 L200,34 L0,34 Z"/>
+        <path class="spark-line" d="M0,18 L33,16 L66,20 L100,12 L133,16 L166,14 L200,10"/>
+        <circle class="spark-dot" cx="200" cy="10" r="2.5"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="grid grid-4 anim anim-4" data-v="w">
+    <div class="card-dark kpi-h">
+      <div class="kpi-h-label">Bevétel · 7 nap</div>
+      <div class="kpi-h-value">642 850 Ft</div>
+      <div class="kpi-h-sub">Shopify ground truth</div>
+      <svg class="spark" viewBox="0 0 200 34" preserveAspectRatio="none">
+        <path class="spark-prev" d="M0,28 L33,26 L66,24 L100,18 L133,21 L166,15 L200,12"/>
+        <path class="spark-line" d="M0,32 L33,30 L66,30 L100,18 L133,26 L166,25 L200,4"/>
+        <circle class="spark-dot" cx="200" cy="4" r="2.5"/>
+      </svg>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Rendelések · 7 nap</div>
+      <div class="kpi-h-value">11</div>
+      <div class="kpi-h-sub">Meta pixel: 8 → eltérés 27%</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Valódi ROAS · átlag</div>
+      <div class="kpi-h-value">4,61×</div>
+      <div class="kpi-h-sub">Shopify ÷ Meta költés</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Átl. kosár · 7 nap</div>
+      <div class="kpi-h-value">58 441 Ft</div>
+      <div class="kpi-h-sub">11 rendelés átlaga</div>
+    </div>
+  </div>
+
+  <!-- ============ COSTING OVERVIEW ============ -->
+  <div class="grid grid-spend anim anim-5">
+    <div class="spend-card">
+      <div class="spend-row">
+        <div>
+          <div class="spend-label">Költés · ez a hónap</div>
+          <div class="spend-value">487 230 Ft</div>
+        </div>
       </div>
-      <div class="funnel-step">
-        <div class="funnel-label">Kosárba tett</div>
-        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:2.94%;"></div></div>
-        <div class="funnel-val">50 db</div>
-      </div>
-      <div class="funnel-step">
-        <div class="funnel-label">Vásárlás</div>
-        <div class="funnel-bar-wrap"><div class="funnel-bar" style="width:0.47%;"></div></div>
-        <div class="funnel-val">8 db</div>
+      <div class="spend-sub">Május 1. óta · <b>11 nap aktív</b> · napi átlag&nbsp;44&nbsp;295&nbsp;Ft</div>
+      <div class="spend-mini" title="Napi költés eloszlás május hónapban">
+        <div class="spend-mini-bar" style="height:42%"></div>
+        <div class="spend-mini-bar" style="height:58%"></div>
+        <div class="spend-mini-bar" style="height:36%"></div>
+        <div class="spend-mini-bar peak" style="height:84%"></div>
+        <div class="spend-mini-bar" style="height:62%"></div>
+        <div class="spend-mini-bar" style="height:48%"></div>
+        <div class="spend-mini-bar" style="height:54%"></div>
+        <div class="spend-mini-bar" style="height:71%"></div>
+        <div class="spend-mini-bar" style="height:46%"></div>
+        <div class="spend-mini-bar" style="height:52%"></div>
+        <div class="spend-mini-bar peak" style="height:78%"></div>
       </div>
     </div>
-    <div style="margin-top:16px;font-size:12px;color:var(--muted);">Kosárba helyezési arány: <b style="color:var(--text);">2,94%</b> · Vásárlási arány: <b style="color:var(--text);">0,47%</b>.</div>
+
+    <div class="spend-card">
+      <div class="spend-row">
+        <div>
+          <div class="spend-label">Költés · idei év</div>
+          <div class="spend-value">3 142 480 Ft</div>
+        </div>
+      </div>
+      <div class="spend-sub">2026. január 1. óta · havi átlag <b>698&nbsp;330&nbsp;Ft</b></div>
+      <div class="spend-mini" title="Havi költés eloszlás 2026-ban">
+        <div class="spend-mini-bar" style="height:54%"></div>
+        <div class="spend-mini-bar" style="height:62%"></div>
+        <div class="spend-mini-bar peak" style="height:82%"></div>
+        <div class="spend-mini-bar" style="height:71%"></div>
+        <div class="spend-mini-bar" style="height:48%" title="Május (folyamatban)"></div>
+      </div>
+    </div>
+
+    <div class="spend-card">
+      <div class="spend-row">
+        <div>
+          <div class="spend-label">Kampány indítása óta</div>
+          <div class="spend-value">12 845 600 Ft</div>
+        </div>
+      </div>
+      <div class="spend-sub">Lifetime · 2024. június 12. óta · <b>698 nap aktív</b> kampány</div>
+      <div class="spend-mini" title="Negyedéves költés trend (lifetime)">
+        <div class="spend-mini-bar" style="height:22%"></div>
+        <div class="spend-mini-bar" style="height:38%"></div>
+        <div class="spend-mini-bar" style="height:46%"></div>
+        <div class="spend-mini-bar" style="height:54%"></div>
+        <div class="spend-mini-bar" style="height:62%"></div>
+        <div class="spend-mini-bar" style="height:71%"></div>
+        <div class="spend-mini-bar peak" style="height:84%"></div>
+        <div class="spend-mini-bar" style="height:58%"></div>
+      </div>
+    </div>
   </div>
-  <div class="panel">
-    <div class="panel-title">Forgalomforrás · máj. 10.</div>
-    <div class="traffic-row"><div class="traffic-label">Facebook</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:46.73%;background:#B8965A;"></div></div><div class="traffic-pct">46,7%</div></div><div class="traffic-row"><div class="traffic-label">Egyéb / nem azonosított</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:41.38%;background:#C8C0B0;"></div></div><div class="traffic-pct">41,4%</div></div><div class="traffic-row"><div class="traffic-label">Közvetlen</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:6.51%;background:#8BA0C8;"></div></div><div class="traffic-pct">6,5%</div></div><div class="traffic-row"><div class="traffic-label">Instagram</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:3.73%;background:#5C8B78;"></div></div><div class="traffic-pct">3,7%</div></div><div class="traffic-row"><div class="traffic-label">Email</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:0.65%;background:#6B7280;"></div></div><div class="traffic-pct">0,7%</div></div><div class="traffic-row"><div class="traffic-label">Google keresés</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:1.00%;background:#B85C3A;"></div></div><div class="traffic-pct">1,0%</div></div><div class="traffic-row"><div class="traffic-label">TikTok</div><div class="traffic-bar-wrap"><div class="traffic-bar" style="width:0.00%;background:#2D2D2D;"></div></div><div class="traffic-pct">0,0%</div></div>
+
+  <!-- ============ SECONDARY KPI ROW ============ -->
+  <div class="grid grid-4 anim anim-6" data-v="d">
+    <div class="kpi-s"><div class="kpi-s-label">Költés (Meta)</div><div class="kpi-s-value">31 790 Ft</div><div class="kpi-s-delta"><strong>▲ +60%</strong> 7d átl. 19&nbsp;924&nbsp;Ft</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CTR</div><div class="kpi-s-value">4,18%</div><div class="kpi-s-delta">▼ −12% 7d átl. 4,75%</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPM</div><div class="kpi-s-value">1 927 Ft</div><div class="kpi-s-delta">▲ +29% 7d átl. 1&nbsp;492&nbsp;Ft</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPA (valódi)</div><div class="kpi-s-value">6 358 Ft</div><div class="kpi-s-delta">Shopify rendelésre vetítve</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Sessions (GA4)</div><div class="kpi-s-value">415</div><div class="kpi-s-delta">▼ −22% 5d átl. 529</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Konv. ráta</div><div class="kpi-s-value">1,20%</div><div class="kpi-s-delta">5 / 415 session</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Visszatérítések</div><div class="kpi-s-value">0</div><div class="kpi-s-delta">7d: 1 db (−48&nbsp;990&nbsp;Ft)</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Frekvencia</div><div class="kpi-s-value">1,40</div><div class="kpi-s-delta">▲ +11% 7d átl. 1,26</div></div>
   </div>
+
+  <div class="grid grid-4 anim anim-6" data-v="w">
+    <div class="kpi-s"><div class="kpi-s-label">Költés · 7 nap</div><div class="kpi-s-value">139 470 Ft</div><div class="kpi-s-delta">Heti összesen</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CTR · átlag</div><div class="kpi-s-value">4,75%</div><div class="kpi-s-delta">Heti súlyozott</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPM · átlag</div><div class="kpi-s-value">1 492 Ft</div><div class="kpi-s-delta">Heti súlyozott</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPA (valódi)</div><div class="kpi-s-value">12 679 Ft</div><div class="kpi-s-delta">Shopify rendelésre vetítve</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Sessions · 5 nap</div><div class="kpi-s-value">2 644</div><div class="kpi-s-delta">ápr. 10–14 (GA4 elérhető)</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Konv. ráta · átlag</div><div class="kpi-s-value">0,42%</div><div class="kpi-s-delta">11 / 2&nbsp;644</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Visszatérítések</div><div class="kpi-s-value">1</div><div class="kpi-s-delta">−48&nbsp;990&nbsp;Ft (ápr. 11)</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Frekvencia · átlag</div><div class="kpi-s-value">1,26</div><div class="kpi-s-delta">Egészséges szint</div></div>
+  </div>
+
+  <!-- ============ TREND + TOP PRODUCTS ============ -->
+  <div class="grid grid-8-4 anim anim-7">
+
+    <div class="card">
+      <div class="sec-head">
+        <span class="sec-title">7 napos trend</span>
+        <span class="sec-sub">Bevétel · Költés · Rendelések · <em style="font-style:normal;color:var(--ink-3)">+ előző időszak</em></span>
+      </div>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+
+    <div class="card">
+      <div class="sec-head">
+        <span class="sec-title">Top termékek</span>
+        <span class="sec-sub" data-v="d">Tegnap</span>
+        <span class="sec-sub" data-v="w">7 nap</span>
+      </div>
+
+      <div class="product-list" data-v="d">
+        <div class="product-row">
+          <div class="product-rank">1</div>
+          <div class="product-info">
+            <div class="product-name">Mind 001</div>
+            <div class="product-stock"><span class="stock-pill stock-low">8 db készlet</span> <span>≈8 napra elég</span></div>
+          </div>
+          <div>
+            <div class="product-num">64 990 Ft</div>
+            <div class="product-qty">1 db eladva</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">2</div>
+          <div class="product-info">
+            <div class="product-name">Arden Luggage</div>
+            <div class="product-stock"><span class="stock-pill stock-ok">14 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">63 990 Ft</div>
+            <div class="product-qty">1 db eladva</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">3</div>
+          <div class="product-info">
+            <div class="product-name">Gem 07 Yogurt</div>
+            <div class="product-stock"><span class="stock-pill stock-ok">22 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">59 990 Ft</div>
+            <div class="product-qty">1 db eladva</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">4</div>
+          <div class="product-info">
+            <div class="product-name">Arden Powder Blush</div>
+            <div class="product-stock"><span class="stock-pill stock-low">6 db készlet</span> <span>≈6 napra elég</span></div>
+          </div>
+          <div>
+            <div class="product-num">48 990 Ft</div>
+            <div class="product-qty">1 db eladva</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">5</div>
+          <div class="product-info">
+            <div class="product-name">Babol 01 Monogram</div>
+            <div class="product-stock"><span class="stock-pill stock-ok">31 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">23 990 Ft</div>
+            <div class="product-qty">1 db eladva</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-list" data-v="w">
+        <div class="product-row">
+          <div class="product-rank">1</div>
+          <div class="product-info">
+            <div class="product-name">9060 Black-White</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">4 db készlet</span> <span>Kritikus</span></div>
+          </div>
+          <div>
+            <div class="product-num">74 990 Ft</div>
+            <div class="product-qty">1 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">2</div>
+          <div class="product-info">
+            <div class="product-name">Love One Mini Tote</div>
+            <div class="product-stock"><span class="stock-pill stock-ok">18 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">69 990 Ft</div>
+            <div class="product-qty">1 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">3</div>
+          <div class="product-info">
+            <div class="product-name">Mind 001</div>
+            <div class="product-stock"><span class="stock-pill stock-low">8 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">64 990 Ft</div>
+            <div class="product-qty">2 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">4</div>
+          <div class="product-info">
+            <div class="product-name">Arden Luggage</div>
+            <div class="product-stock"><span class="stock-pill stock-ok">14 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">63 990 Ft</div>
+            <div class="product-qty">2 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">5</div>
+          <div class="product-info">
+            <div class="product-name">Gem 07 Yogurt</div>
+            <div class="product-stock"><span class="stock-pill stock-ok">22 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">59 990 Ft</div>
+            <div class="product-qty">2 db</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ MIX + FUNNEL + SOURCE ============ -->
+  <div class="grid grid-3 anim anim-8">
+
+    <div class="card">
+      <div class="sec-head">
+        <span class="sec-title">Vásárlói mix</span>
+        <span class="sec-sub" data-v="d">Tegnap</span>
+        <span class="sec-sub" data-v="w">7 nap</span>
+      </div>
+
+      <div class="mix-wrap" data-v="d">
+        <div class="mix-bar-wrap">
+          <div class="mix-donut">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(20,22,28,.07)" stroke-width="14"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#14161C" stroke-width="14" stroke-dasharray="251.33" stroke-dashoffset="150.8" stroke-linecap="butt"/>
+            </svg>
+            <div class="mix-donut-center">
+              <div class="mix-donut-num">40%</div>
+              <div class="mix-donut-lbl">Visszatérő</div>
+            </div>
+          </div>
+          <div class="mix-legend">
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:#14161C"></span>Visszatérő</div>
+              <div class="mix-leg-val">2 fő</div>
+            </div>
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:rgba(20,22,28,.18)"></span>Új vásárló</div>
+              <div class="mix-leg-val">3 fő</div>
+            </div>
+          </div>
+        </div>
+        <div class="mix-stat">
+          A tegnapi bevétel <b>34%-a (≈106 200 Ft)</b> visszatérő klubtagoktól érkezett. Az új vásárlók átlagos kosárértéke 68&nbsp;730&nbsp;Ft volt.
+        </div>
+      </div>
+
+      <div class="mix-wrap" data-v="w">
+        <div class="mix-bar-wrap">
+          <div class="mix-donut">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(20,22,28,.07)" stroke-width="14"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#14161C" stroke-width="14" stroke-dasharray="251.33" stroke-dashoffset="160.85" stroke-linecap="butt"/>
+            </svg>
+            <div class="mix-donut-center">
+              <div class="mix-donut-num">36%</div>
+              <div class="mix-donut-lbl">Visszatérő</div>
+            </div>
+          </div>
+          <div class="mix-legend">
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:#14161C"></span>Visszatérő</div>
+              <div class="mix-leg-val">4 fő</div>
+            </div>
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:rgba(20,22,28,.18)"></span>Új vásárló</div>
+              <div class="mix-leg-val">7 fő</div>
+            </div>
+          </div>
+        </div>
+        <div class="mix-stat">
+          7 napos átlagban a klub-arány <b>+8 pontot</b> nőtt az előző héthez képest. A klub-effektus stabilan erősödik.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-head">
+        <span class="sec-title">Vásárlási tölcsér</span>
+        <span class="sec-sub" data-v="d">Tegnap · Shopify</span>
+        <span class="sec-sub" data-v="w">7 nap · Shopify</span>
+      </div>
+
+      <div class="funnel" data-v="d">
+        <svg class="funnel-svg" viewBox="0 0 480 310" preserveAspectRatio="xMidYMid meet" aria-label="Vásárlási tölcsér">
+          <defs>
+            <linearGradient id="fgrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3A3D45"/>
+              <stop offset="100%" stop-color="#0E1014"/>
+            </linearGradient>
+            <linearGradient id="fhi" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>
+              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+            </linearGradient>
+            <filter id="fshadow" x="-50%" y="-50%" width="200%" height="200%">
+              <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(20,22,28,.20)"/>
+            </filter>
+          </defs>
+
+          <g class="layer-group stage-1">
+            <path d="M40,15 L300,15 L270,75 L70,75 Z" fill="url(#fgrad)" filter="url(#fshadow)"/>
+            <path d="M40,15 L300,15 L296,22 L44,22 Z" fill="url(#fhi)"/>
+            <text x="170" y="44" text-anchor="middle" fill="#ffffff" class="fl-num">415</text>
+            <text x="170" y="60" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">LÁTOGATÁS</text>
+          </g>
+
+          <g class="drop-g drop-1">
+            <line x1="305" y1="80" x2="350" y2="80" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M348,76 L356,80 L348,84 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="362" y="77" fill="#14161C" class="fd-num">403</text>
+            <text x="362" y="91" fill="#6B7280" class="fd-pct">−97,1%</text>
+          </g>
+
+          <g class="layer-group stage-2">
+            <path d="M70,85 L270,85 L240,145 L100,145 Z" fill="url(#fgrad)" opacity=".94" filter="url(#fshadow)"/>
+            <path d="M70,85 L270,85 L266,92 L74,92 Z" fill="url(#fhi)"/>
+            <text x="170" y="114" text-anchor="middle" fill="#ffffff" class="fl-num">12</text>
+            <text x="170" y="130" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">KOSÁRBA</text>
+          </g>
+
+          <g class="drop-g drop-2">
+            <line x1="275" y1="150" x2="320" y2="150" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M318,146 L326,150 L318,154 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="332" y="147" fill="#14161C" class="fd-num">5</text>
+            <text x="332" y="161" fill="#6B7280" class="fd-pct">−41,7%</text>
+          </g>
+
+          <g class="layer-group stage-3">
+            <path d="M100,155 L240,155 L210,215 L130,215 Z" fill="url(#fgrad)" opacity=".88" filter="url(#fshadow)"/>
+            <path d="M100,155 L240,155 L236,162 L104,162 Z" fill="url(#fhi)"/>
+            <text x="170" y="184" text-anchor="middle" fill="#ffffff" class="fl-num">7</text>
+            <text x="170" y="200" text-anchor="middle" fill="rgba(255,255,255,.65)" class="fl-lbl">CHECKOUT</text>
+          </g>
+
+          <g class="drop-g drop-3">
+            <line x1="245" y1="220" x2="290" y2="220" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M288,216 L296,220 L288,224 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="302" y="217" fill="#14161C" class="fd-num">2</text>
+            <text x="302" y="231" fill="#6B7280" class="fd-pct">−28,6%</text>
+          </g>
+
+          <g class="layer-group stage-4">
+            <path d="M130,225 L210,225 L188,285 L152,285 Z" fill="url(#fgrad)" opacity=".82" filter="url(#fshadow)"/>
+            <path d="M130,225 L210,225 L208,232 L132,232 Z" fill="url(#fhi)"/>
+            <text x="170" y="254" text-anchor="middle" fill="#ffffff" class="fl-num">5</text>
+            <text x="170" y="270" text-anchor="middle" fill="rgba(255,255,255,.7)" class="fl-lbl">VÁSÁRLÁS</text>
+          </g>
+        </svg>
+
+        <div class="funnel-summary">
+          <div class="fs-item">
+            <span class="fs-label">Konv. ráta</span>
+            <span class="fs-value">1,20%</span>
+          </div>
+          <div class="fs-item">
+            <span class="fs-label">Legnagyobb kiesés</span>
+            <span class="fs-value">Látogatás → Kosár</span>
+          </div>
+        </div>
+
+        <div class="funnel-note">A Meta pixel 4 vásárlást rögzített — 1 rendelés eltérés. Pixel audit javasolt.</div>
+      </div>
+
+      <div class="funnel" data-v="w">
+        <svg class="funnel-svg" viewBox="0 0 480 310" preserveAspectRatio="xMidYMid meet" aria-label="Vásárlási tölcsér 7 nap">
+          <g class="layer-group stage-1">
+            <path d="M40,15 L300,15 L270,75 L70,75 Z" fill="url(#fgrad)" filter="url(#fshadow)"/>
+            <path d="M40,15 L300,15 L296,22 L44,22 Z" fill="url(#fhi)"/>
+            <text x="170" y="44" text-anchor="middle" fill="#ffffff" class="fl-num">2 644</text>
+            <text x="170" y="60" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">LÁTOGATÁS</text>
+          </g>
+
+          <g class="drop-g drop-1">
+            <line x1="305" y1="80" x2="350" y2="80" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M348,76 L356,80 L348,84 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="362" y="77" fill="#14161C" class="fd-num">2 582</text>
+            <text x="362" y="91" fill="#6B7280" class="fd-pct">−97,7%</text>
+          </g>
+
+          <g class="layer-group stage-2">
+            <path d="M70,85 L270,85 L240,145 L100,145 Z" fill="url(#fgrad)" opacity=".94" filter="url(#fshadow)"/>
+            <path d="M70,85 L270,85 L266,92 L74,92 Z" fill="url(#fhi)"/>
+            <text x="170" y="114" text-anchor="middle" fill="#ffffff" class="fl-num">62</text>
+            <text x="170" y="130" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">KOSÁRBA</text>
+          </g>
+
+          <g class="drop-g drop-2">
+            <line x1="275" y1="150" x2="320" y2="150" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M318,146 L326,150 L318,154 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="332" y="147" fill="#14161C" class="fd-num">43</text>
+            <text x="332" y="161" fill="#6B7280" class="fd-pct">−69,4%</text>
+          </g>
+
+          <g class="layer-group stage-3">
+            <path d="M100,155 L240,155 L210,215 L130,215 Z" fill="url(#fgrad)" opacity=".88" filter="url(#fshadow)"/>
+            <path d="M100,155 L240,155 L236,162 L104,162 Z" fill="url(#fhi)"/>
+            <text x="170" y="184" text-anchor="middle" fill="#ffffff" class="fl-num">19</text>
+            <text x="170" y="200" text-anchor="middle" fill="rgba(255,255,255,.65)" class="fl-lbl">CHECKOUT</text>
+          </g>
+
+          <g class="drop-g drop-3">
+            <line x1="245" y1="220" x2="290" y2="220" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M288,216 L296,220 L288,224 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="302" y="217" fill="#14161C" class="fd-num">8</text>
+            <text x="302" y="231" fill="#6B7280" class="fd-pct">−42,1%</text>
+          </g>
+
+          <g class="layer-group stage-4">
+            <path d="M130,225 L210,225 L188,285 L152,285 Z" fill="url(#fgrad)" opacity=".82" filter="url(#fshadow)"/>
+            <path d="M130,225 L210,225 L208,232 L132,232 Z" fill="url(#fhi)"/>
+            <text x="170" y="254" text-anchor="middle" fill="#ffffff" class="fl-num">11</text>
+            <text x="170" y="270" text-anchor="middle" fill="rgba(255,255,255,.7)" class="fl-lbl">VÁSÁRLÁS</text>
+          </g>
+        </svg>
+
+        <div class="funnel-summary">
+          <div class="fs-item">
+            <span class="fs-label">Konv. ráta</span>
+            <span class="fs-value">0,42%</span>
+          </div>
+          <div class="fs-item">
+            <span class="fs-label">Legnagyobb kiesés</span>
+            <span class="fs-value">Látogatás → Kosár</span>
+          </div>
+        </div>
+
+        <div class="funnel-note">Kosár → Checkout drop-off 69% — emlékeztető e-mail vagy retargeting javasolt.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="sec-head">
+        <span class="sec-title">Forgalomforrás</span>
+        <span class="sec-sub" data-v="d">GA4 · ápr. 14</span>
+        <span class="sec-sub" data-v="w">GA4 · ápr. 10–14</span>
+      </div>
+
+      <div class="src-list" data-v="d">
+        <div class="src-row"><span class="src-name">Facebook</span><div class="src-bar-bg"><div class="src-bar" style="width:55.5%"></div></div><span class="src-pct">55,5%</span></div>
+        <div class="src-row"><span class="src-name">Egyéb</span><div class="src-bar-bg"><div class="src-bar" style="width:30.5%;opacity:.55"></div></div><span class="src-pct">30,5%</span></div>
+        <div class="src-row"><span class="src-name">Direkt</span><div class="src-bar-bg"><div class="src-bar" style="width:8.6%;opacity:.65"></div></div><span class="src-pct">8,6%</span></div>
+        <div class="src-row"><span class="src-name">Google</span><div class="src-bar-bg"><div class="src-bar" style="width:1.8%;opacity:.45"></div></div><span class="src-pct">1,8%</span></div>
+        <div class="src-row"><span class="src-name">Email</span><div class="src-bar-bg"><div class="src-bar" style="width:1.8%;opacity:.45"></div></div><span class="src-pct">1,8%</span></div>
+        <div class="src-row"><span class="src-name">Instagram</span><div class="src-bar-bg"><div class="src-bar" style="width:1.7%;opacity:.45"></div></div><span class="src-pct">1,7%</span></div>
+        <div class="src-row"><span class="src-name">TikTok</span><div class="src-bar-bg"><div class="src-bar" style="width:0.5%;opacity:.35"></div></div><span class="src-pct">0%</span></div>
+      </div>
+
+      <div class="src-list" data-v="w">
+        <div class="src-row"><span class="src-name">Facebook</span><div class="src-bar-bg"><div class="src-bar" style="width:49%"></div></div><span class="src-pct">49%</span></div>
+        <div class="src-row"><span class="src-name">TikTok</span><div class="src-bar-bg"><div class="src-bar" style="width:29%;opacity:.75"></div></div><span class="src-pct">29%</span></div>
+        <div class="src-row"><span class="src-name">Direkt</span><div class="src-bar-bg"><div class="src-bar" style="width:8%;opacity:.55"></div></div><span class="src-pct">8%</span></div>
+        <div class="src-row"><span class="src-name">Egyéb</span><div class="src-bar-bg"><div class="src-bar" style="width:7.7%;opacity:.55"></div></div><span class="src-pct">7,7%</span></div>
+        <div class="src-row"><span class="src-name">Google</span><div class="src-bar-bg"><div class="src-bar" style="width:2.3%;opacity:.45"></div></div><span class="src-pct">2,3%</span></div>
+        <div class="src-row"><span class="src-name">Email</span><div class="src-bar-bg"><div class="src-bar" style="width:2.2%;opacity:.45"></div></div><span class="src-pct">2,2%</span></div>
+        <div class="src-row"><span class="src-name">Instagram</span><div class="src-bar-bg"><div class="src-bar" style="width:2.1%;opacity:.45"></div></div><span class="src-pct">2,1%</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============ TOP CREATIVES ============ -->
+  <div class="grid anim anim-9">
+    <div class="card card-flat">
+      <div class="sec-head">
+        <span class="sec-title">Top kreatívok</span>
+        <span class="sec-sub" data-v="d">Tegnap · spend szerint</span>
+        <span class="sec-sub" data-v="w">7 nap · spend szerint</span>
+      </div>
+      <div data-v="d">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Hirdetés</th><th class="num">Költés</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">Bevétel</th><th class="num">ROAS</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Reels | Gina <span class="badge">Top CTR</span></td>
+            <td class="num"><span class="cell-num-with-bar">11 819 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num">7,00%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">114 980 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:66%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r4">9,73×</span></span></td>
+          </tr>
+          <tr>
+            <td>Shopping | Feed <span class="badge">Top ROAS</span></td>
+            <td class="num"><span class="cell-num-with-bar">9 996 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:85%"></span></span></span></td>
+            <td class="num">2,62%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">172 970 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r5">17,30×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Dorka</td>
+            <td class="num"><span class="cell-num-with-bar">6 166 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:52%"></span></span></span></td>
+            <td class="num">3,82%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Carousel | MIX</td>
+            <td class="num"><span class="cell-num-with-bar">1 409 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:12%"></span></span></span></td>
+            <td class="num">1,45%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Reels | V2</td>
+            <td class="num"><span class="cell-num-with-bar">1 303 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:11%"></span></span></span></td>
+            <td class="num">4,71%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Reels | KV</td>
+            <td class="num"><span class="cell-num-with-bar">590 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:5%"></span></span></span></td>
+            <td class="num">0,00%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Reels | V1 <span class="pill pill-soft">▲ 15,89%</span></td>
+            <td class="num"><span class="cell-num-with-bar">282 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:3%"></span></span></span></td>
+            <td class="num">15,89%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Feed | KV</td>
+            <td class="num"><span class="cell-num-with-bar">127 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:2%"></span></span></span></td>
+            <td class="num">2,99%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Reels | V3</td>
+            <td class="num"><span class="cell-num-with-bar">98 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:1%"></span></span></span></td>
+            <td class="num">2,38%</td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      </div>
+      <div data-v="w">
+        <p style="font-size:13px;color:var(--dim);margin:0">Heti kreatív szintű bontás a következő frissítésben érhető el. „Tegnap" nézetre váltva hirdetés szintű adatot látsz.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ NAPI BONTÁS ============ -->
+  <div class="grid anim anim-9">
+    <div class="card card-flat">
+      <div class="sec-head">
+        <span class="sec-title">Napi bontás</span>
+        <span class="sec-sub">Elmúlt 7 nap · ápr. 8–14</span>
+      </div>
+      <div class="table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Dátum</th>
+            <th class="num">Költés</th>
+            <th class="num">Rendelés</th>
+            <th class="num">Bevétel</th>
+            <th class="num">ROAS</th>
+            <th class="num">AOV</th>
+            <th class="num">Sessions</th>
+            <th class="num">Konv. ráta</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Ápr. 8. (sze)</td>
+            <td class="num"><span class="cell-num-with-bar">9 236 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:29%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot dot-mute"></span></span></td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Ápr. 9. (cs)</td>
+            <td class="num"><span class="cell-num-with-bar">13 913 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:44%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">28 990 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:9%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r1">2,08×</span></span></td>
+            <td class="num">28 990 Ft</td>
+            <td class="na">–</td>
+            <td class="na">–</td>
+          </tr>
+          <tr>
+            <td>Ápr. 10. (p)</td>
+            <td class="num"><span class="cell-num-with-bar">9 463 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:30%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">25 980 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:8%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r2">2,75×</span></span></td>
+            <td class="num">25 980 Ft</td>
+            <td class="num">195</td>
+            <td class="num"><span class="cr-cell">0,51%<span class="cr-bar"><span class="cr-fill" style="width:17%"></span></span></span></td>
+          </tr>
+          <tr>
+            <td>Ápr. 11. (szo)</td>
+            <td class="num"><span class="cell-num-with-bar">27 012 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:85%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">154 980 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:50%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">5,74×</span></span></td>
+            <td class="num">77 490 Ft</td>
+            <td class="num">1 004</td>
+            <td class="num"><span class="cr-cell">0,20%<span class="cr-bar"><span class="cr-fill" style="width:7%"></span></span></span></td>
+          </tr>
+          <tr>
+            <td>Ápr. 12. (v)</td>
+            <td class="num"><span class="cell-num-with-bar">24 456 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:77%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">59 491 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:19%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r1">2,43×</span></span></td>
+            <td class="num">59 491 Ft</td>
+            <td class="num">606</td>
+            <td class="num"><span class="cr-cell">0,17%<span class="cr-bar"><span class="cr-fill" style="width:6%"></span></span></span></td>
+          </tr>
+          <tr>
+            <td>Ápr. 13. (h)</td>
+            <td class="num"><span class="cell-num-with-bar">23 600 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:74%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">61 009 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:20%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r2">2,58×</span></span></td>
+            <td class="num">61 009 Ft</td>
+            <td class="num">424</td>
+            <td class="num"><span class="cr-cell">0,24%<span class="cr-bar"><span class="cr-fill" style="width:8%"></span></span></span></td>
+          </tr>
+          <tr class="row-today">
+            <td>Ápr. 14. (k) · tegnap</td>
+            <td class="num"><span class="cell-num-with-bar">31 790 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">312 400 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r5">9,83×</span></span></td>
+            <td class="num">62 480 Ft</td>
+            <td class="num">415</td>
+            <td class="num"><span class="cr-cell">1,20%<span class="cr-bar"><span class="cr-fill" style="width:40%"></span></span></span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ EXECUTIVE SUMMARY ============ -->
+  <div class="grid">
+    <div class="card card-strong card-flat">
+      <div class="sec-head">
+        <span class="sec-title">Executive összefoglaló</span>
+        <span class="sec-sub">Napi narratíva</span>
+      </div>
+      <div class="narr">
+        <p>Tegnap (2026-04-14) a webshop <b>5 rendelést teljesített 312&nbsp;400&nbsp;Ft értékben</b>. A hirdetési költés 31&nbsp;790&nbsp;Ft volt — valódi ROAS&nbsp;9,83×, ez a hét legjobb napja. A Meta pixel 4 vásárlást rögzített, 1 rendeléssel kevesebbet a tényleges Shopify rendelésszámnál — pixel audit javasolt, mert a Meta beállító algoritmusa pontatlan adat alapján optimalizál.</p>
+        <p>A bevétel <b>34%-a visszatérő klubtagoktól</b> érkezett (2 fő, 106&nbsp;200&nbsp;Ft) — a klub-effektus stabilan tartja magát. A látogatók átlagosan 1 perc 58 másodpercet töltöttek az oldalon, az átlagos kosárérték 62&nbsp;480&nbsp;Ft.</p>
+        <p>Két termék készlete kritikus: a <b>Mind 001</b> (8 db) és az <b>Arden Powder Blush</b> (6 db) — utánrendelés vagy a hirdetési költés átirányítása ajánlott, mielőtt elfogynak. A Shopping Feed kreatív 17,3× ROAS-szal továbbra is kiemelkedő.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ KPI EXPLAINER ============ -->
+  <div class="grid">
+    <div class="card card-flat">
+      <details>
+        <summary>Mit jelentenek ezek a számok?</summary>
+        <div class="kpi-explainer">
+          <div class="kpi-exp-item"><div class="kpi-exp-label">Bevétel (Shopify)</div><div class="kpi-exp-text">Tényleges webshop bevétel az adott napon, közvetlenül a Shopify rendelésekből. Ez a legpontosabb forrás.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">Valódi ROAS</div><div class="kpi-exp-text">Shopify bevétel ÷ Meta hirdetési költés. A Meta saját ROAS-a a pixel becslését használja, ami eltérhet a tényleges bevételtől.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">Átlagos kosár (AOV)</div><div class="kpi-exp-text">A napi bevétel osztva a rendelések számával. Mutatja, mennyit költ átlagosan egy vásárló.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">Konverziós ráta</div><div class="kpi-exp-text">Hány látogatóból lett vásárló. 1% felett kiváló prémium szegmensben.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">Visszatérő vásárló arány</div><div class="kpi-exp-text">A vásárlók közül hány már korábban is rendelt. Magas arány = erős klub és ismételt vásárlási hajlandóság.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">CTR (Click-Through Rate)</div><div class="kpi-exp-text">A hirdetést látók hány százaléka kattintott. Magasabb = relevánsabb kreatív.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">CPM</div><div class="kpi-exp-text">1000 megjelenés ára forintban. Alacsonyabb = hatékonyabb elérés.</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">CPA (valódi)</div><div class="kpi-exp-text">Egy Shopify rendelés megszerzésének átlagköltsége (Meta költés ÷ Shopify rendelés).</div></div>
+          <div class="kpi-exp-item"><div class="kpi-exp-label">Frekvencia</div><div class="kpi-exp-text">Átlagosan hányszor látta ugyanaz a személy a hirdetéseket. 2,0 felett a fáradtság kockázata nő.</div></div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <div>Nobilezze Club · Napi vezetői riport · készült 2026-04-14 09:00</div>
+    <div class="src-list-tags">
+      <span class="src-tag">Shopify · 2 perce</span>
+      <span class="src-tag">Meta Ads · 24 órája</span>
+      <span class="src-tag">Google Analytics 4 · 8 órája</span>
+    </div>
+  </footer>
+
 </div>
 
-<h2 class="section-title">Kosárba helyezett és megvásárolt termékek</h2>
-<div class="table-card" id="products-napi">
-  <div style="font-size:11px;color:var(--muted);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">2026. május 10. (vasárnap)</div>
-  <div class="table-scroll">
-    <table>
-      <thead><tr><th>Termék neve</th><th>Kosárba tett</th><th>Megvásárolt</th><th>Bevétel</th><th>Állapot</th></tr></thead>
-      <tbody><tr><td>Charlotte Brown</td><td class="num">5</td><td>1</td><td class="num"><span class="num">59 990 Ft</span></td><td><span style="color:var(--sage);">✓ vásárolt</span></td></tr><tr><td>Charlotte Navy</td><td class="num">3</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Loias Rosso</td><td class="num">3</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Sheila Black Gold</td><td class="num">3</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Sheila Silver Edition</td><td class="num">3</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Arden Luggage</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Jaycee Mid Black</td><td class="num">2</td><td>1</td><td class="num"><span class="num">64 990 Ft</span></td><td><span style="color:var(--sage);">✓ vásárolt</span></td></tr><tr><td>Jaycee Mid Powder Blush</td><td class="num">2</td><td>1</td><td class="num"><span class="num">67 990 Ft</span></td><td><span style="color:var(--sage);">✓ vásárolt</span></td></tr><tr><td>Jet Set Continental</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Jet Set Tote</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Lyra Optic White</td><td class="num">2</td><td>3</td><td class="num"><span class="num">149 970 Ft</span></td><td><span style="color:var(--sage);">✓ vásárolt</span></td></tr><tr><td>Reed Navy</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Scarlett Re Nero</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Sheila Powder Blush</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Sheila Brown</td><td class="num">2</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>AF1 Low Wheat</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Arden Black</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Arden Medium Black</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>BEmillie</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Gilly Half Moon Crossbody</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Grand Court 2.0</td><td class="num">1</td><td>1</td><td class="num"><span class="num">18 990 Ft</span></td><td><span style="color:var(--sage);">✓ vásárolt</span></td></tr><tr><td>Jet Set Large Woven</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Jet Set Travel Black</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Loais Black</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Mairiboo</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Pratt Powder Blush</td><td class="num">1</td><td>1</td><td class="num"><span class="num">59 990 Ft</span></td><td><span style="color:var(--sage);">✓ vásárolt</span></td></tr><tr><td>Rope Vulc Sneaker</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr><tr><td>Vefan</td><td class="num">1</td><td>0</td><td class="num">—</td><td><span style="color:var(--muted);">○ csak kosár</span></td></tr></tbody>
-    </table>
-  </div>
-  <div style="margin-top:14px;font-size:12px;color:var(--muted);">Összesen: <b style="color:var(--text);">50 db</b> termék kosárba helyezve · <b style="color:var(--text);">8 db</b> megvásárolt.</div>
-</div>
-
-<div class="table-card" id="products-heti" style="display:none;">
-  <div style="font-size:11px;color:var(--muted);margin-bottom:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;">7 napos termékbontás</div>
-  <p style="color:var(--muted);font-size:13px;">A 7 napos termékbontás a következő frissítésnél elérhető lesz.</p>
-</div>
-
-<h2 class="section-title">Top kreatívok · 2026. május 10. (vasárnap)</h2>
-<div class="two-col" style="margin-bottom:14px;">
-  <div class="table-card" style="margin-bottom:0;">
-    <div class="panel-title">Legnagyobb Költés</div>
-    <table>
-      <thead><tr><th>Hirdetés</th><th>Költés</th><th>ROAS</th><th>Vásárlás</th></tr></thead>
-      <tbody><tr><td>Reels | Sz.Rebi</td><td class="num">52 640 Ft</td><td class="num">4,60×</td><td>5</td></tr><tr><td>Reels | V1</td><td class="num">20 866 Ft</td><td class="num"><span style="color:var(--muted);">—</span></td><td><span style="color:var(--muted);">—</span></td></tr><tr><td>Reels | V4</td><td class="num">17 215 Ft</td><td class="num">2,96×</td><td>1</td></tr><tr><td>Reels | Gina</td><td class="num">7 724 Ft</td><td class="num">16,51×</td><td>3</td></tr><tr><td>Reels | V5</td><td class="num">836 Ft</td><td class="num"><span style="color:var(--muted);">—</span></td><td><span style="color:var(--muted);">—</span></td></tr></tbody>
-    </table>
-  </div>
-  <div class="table-card" style="margin-bottom:0;">
-    <div class="panel-title">Legjobb ROAS</div>
-    <table>
-      <thead><tr><th>Hirdetés</th><th>ROAS</th><th>Költés</th><th>Vásárlás</th></tr></thead>
-      <tbody><tr><td>Reels | Gina</td><td class="roas-hi">16,51×</td><td class="num">7 724 Ft</td><td>3</td></tr><tr><td>Reels | Sz.Rebi</td><td class="roas-hi">4,60×</td><td class="num">52 640 Ft</td><td>5</td></tr><tr><td>Reels | V4</td><td class="roas-hi">2,96×</td><td class="num">17 215 Ft</td><td>1</td></tr></tbody>
-    </table>
-  </div>
-</div>
-
-<h2 class="section-title" style="margin-top:22px;">Napi bontás (7 nap)</h2>
-<div class="table-card">
-  <div class="table-scroll">
-    <table>
-      <thead><tr><th>Nap</th><th>Költés</th><th>Látogatók</th><th>Tranzakció</th><th>Bevétel (GA4)</th><th>Átl. idő</th></tr></thead>
-      <tbody><tr><td>máj. 4. (hétfő)</td><td class="num">74 379 Ft</td><td>1 194</td><td>9</td><td class="num">363 918 Ft</td><td>1:54 perc</td></tr><tr><td>máj. 5. (kedd)</td><td class="num">66 899 Ft</td><td>1 283</td><td>11</td><td class="num">566 698 Ft</td><td>2:06 perc</td></tr><tr><td>máj. 6. (szerda)</td><td class="num">61 687 Ft</td><td>1 260</td><td>5</td><td class="num">321 675 Ft</td><td>1:35 perc</td></tr><tr><td>máj. 7. (csütörtök)</td><td class="num">71 920 Ft</td><td>1 465</td><td>6</td><td class="num">284 594 Ft</td><td>1:44 perc</td></tr><tr><td>máj. 8. (péntek)</td><td class="num">107 880 Ft</td><td>1 944</td><td>6</td><td class="num">274 489 Ft</td><td>1:52 perc</td></tr><tr><td>máj. 9. (szombat)</td><td class="num">92 513 Ft</td><td>1 533</td><td>11</td><td class="num">462 040 Ft</td><td>2:08 perc</td></tr><tr style="background:#F5F3EE;font-weight:600;"><td>máj. 10. (vasárnap) ← tegnap</td><td class="num">100 959 Ft</td><td>1 699</td><td>8</td><td class="num">363 980 Ft</td><td>3:41 perc</td></tr></tbody>
-    </table>
-  </div>
-</div>
-
-<div class="collapsible-wrap">
-  <button class="collapsible-btn" onclick="toggleCollapsible(this)">
-    <span>Mit jelentenek ezek a számok?</span>
-    <span class="arrow">▾</span>
-  </button>
-  <div class="collapsible-content">
-    <div class="kpi-explain"><h4>Költés</h4><p>Az adott napon a Meta hirdetési rendszerbe befektetett összeg. Ez az a pénz, amit a platform felhasznált a hirdetések megjelenítésére.</p></div>
-    <div class="kpi-explain"><h4>ROAS (megtérülési arány)</h4><p>Minden egyes elköltött forint hány forint bevételt hozott. Például: 2,1× ROAS azt jelenti, hogy 1 Ft hirdetési költésre 2,1 Ft bevétel érkezett.</p></div>
-    <div class="kpi-explain"><h4>Vásárlások (Meta)</h4><p>A Meta hirdetési rendszer által követett, hirdetésből eredő vásárlások száma. Az adat néha 24–48 órát késik — ez ismert jelenség, nem hiba.</p></div>
-    <div class="kpi-explain"><h4>Bevétel</h4><p>A hirdetésekből érkező rendelések teljes értéke forintban.</p></div>
-    <div class="kpi-explain"><h4>Ügyfélszerzési költség</h4><p>Átlagosan mennyibe kerül egy vásárlás megszerzése. Kiszámítása: napi költés ÷ napi vásárlások száma. Minél alacsonyabb, annál hatékonyabb.</p></div>
-    <div class="kpi-explain"><h4>Átkattintási arány (CTR)</h4><p>Az emberek hány százaléka kattintott rá a hirdetésre, akik látták azt. 8% feletti érték általában jónak számít a divat szektorban.</p></div>
-    <div class="kpi-explain"><h4>Ezer megjelenés ára (CPM)</h4><p>Mennyibe kerül, hogy a hirdetés 1 000-szer megjelenjen. Alacsonyabb CPM = olcsóbban érjük el a közönséget.</p></div>
-    <div class="kpi-explain"><h4>Elérés</h4><p>Hány egyedi személy látta legalább egyszer a hirdetéseket az adott napon.</p></div>
-    <div class="kpi-explain"><h4>Frekvencia</h4><p>Átlagosan hányszor látta ugyanaz a személy a hirdetést. 1–2 közötti érték egészséges — magasabb értéknél a közönség „megtelhet" a hirdetéssel.</p></div>
-    <div class="kpi-explain"><h4>Látogatók (Sessions)</h4><p>A weboldalt meglátogató munkamenetek száma a Google Analytics szerint.</p></div>
-    <div class="kpi-explain"><h4>Átlagos munkamenet idő</h4><p>Átlagosan mennyi időt töltött egy látogató a weboldalon. Hosszabb idő általában nagyobb érdeklődést jelez.</p></div>
-    <div class="kpi-explain"><h4>Tranzakciók (GA4)</h4><p>A Google Analytics által rögzített sikeres vásárlások száma. Kis eltérés előfordulhat a Meta adatokhoz képest az eltérő mérési módszerek miatt — a tegnapi adatok 24–48 óra múlva véglegesülnek.</p></div>
-  </div>
-</div>
-
-<div class="footer">Dropline Digital · Nobilezze Club · Napi riport · 2026. május 11.</div>
-</div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-function showView(view, btn) {
-  document.getElementById("view-napi").style.display = view === "napi" ? "grid" : "none";
-  document.getElementById("view-heti").style.display = view === "heti" ? "grid" : "none";
-  document.getElementById("products-napi").style.display = view === "napi" ? "block" : "none";
-  document.getElementById("products-heti").style.display = view === "heti" ? "block" : "none";
-  document.querySelectorAll(".toggle-btn").forEach(b => b.classList.remove("active"));
-  btn.classList.add("active");
+/* ============ PERIOD CHIPS ============ */
+var chips=document.querySelectorAll('#periodChips .chip');
+chips.forEach(function(c){
+  c.addEventListener('click',function(){
+    chips.forEach(function(x){x.classList.remove('active')});
+    c.classList.add('active');
+    var p=c.dataset.period;
+    document.body.classList.toggle('w',p==='w');
+    if(p==='custom'){togglePop(true)}else{togglePop(false)}
+  });
+});
+
+/* ============ RANGE POPOVER ============ */
+function togglePop(force){
+  var pop=document.getElementById('rangePop');
+  if(typeof force==='boolean')pop.classList.toggle('open',force);
+  else pop.classList.toggle('open');
 }
-function toggleCollapsible(btn) {
-  btn.classList.toggle("open");
-  btn.nextElementSibling.classList.toggle("open");
-}
-const ctx = document.getElementById("trendChart").getContext("2d");
-new Chart(ctx, {
-  type: "line",
-  data: {
-    labels: ['máj. 4.', 'máj. 5.', 'máj. 6.', 'máj. 7.', 'máj. 8.', 'máj. 9.', 'máj. 10.'],
-    datasets: [
-      { label: "Költés (Ft)", data: [74379, 66899, 61687, 71920, 107880, 92513, 100959], borderColor: "#B8965A", backgroundColor: "transparent", borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: "#B8965A", tension: 0.3, yAxisID: "y" },
-      { label: "Látogatók", data: [1194, 1283, 1260, 1465, 1944, 1533, 1699], borderColor: "#5C8B78", backgroundColor: "transparent", borderWidth: 2.5, pointRadius: 4, pointBackgroundColor: "#5C8B78", tension: 0.3, yAxisID: "y1" },
-      { label: "Vásárlás", data: [9, 10, 5, 6, 6, 11, 9], borderColor: "#B85C3A", backgroundColor: "transparent", borderWidth: 2, pointRadius: 5, pointBackgroundColor: "#B85C3A", tension: 0.3, yAxisID: "y2" }
-    ]
-  },
-  options: {
-    responsive: true, animation: false,
-    interaction: { mode: "index", intersect: false },
-    plugins: { legend: { display: false } },
-    scales: {
-      x: { grid: { color: "#F0EDE8" }, ticks: { font: { family: "Inter", size: 11 }, color: "#7A7370" } },
-      y: { type: "linear", position: "left", grid: { color: "#F0EDE8" }, ticks: { font: { family: "Inter", size: 11 }, color: "#B8965A", callback: v => v.toLocaleString("hu-HU") + " Ft" } },
-      y1: { type: "linear", position: "right", display: false },
-      y2: { type: "linear", position: "right", display: false, min: 0, max: 14 }
-    }
+document.addEventListener('click',function(e){
+  var pop=document.getElementById('rangePop');
+  var btn=document.getElementById('customBtn');
+  if(!pop.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){
+    pop.classList.remove('open');
   }
 });
+function quickRange(type){
+  var today=new Date('2026-04-14');
+  var from=new Date(today),to=new Date(today);
+  if(type==='w1'){from.setDate(today.getDate()-7);to.setDate(today.getDate()-1)}
+  if(type==='m1'){from=new Date(today.getFullYear(),today.getMonth()-1,1);to=new Date(today.getFullYear(),today.getMonth(),0)}
+  if(type==='q1'){from=new Date(today.getFullYear(),today.getMonth()-3,1);to=new Date(today.getFullYear(),today.getMonth(),0)}
+  if(type==='y1'){from.setFullYear(today.getFullYear()-1);to.setFullYear(today.getFullYear()-1)}
+  document.getElementById('rangeFrom').value=from.toISOString().slice(0,10);
+  document.getElementById('rangeTo').value=to.toISOString().slice(0,10);
+}
+function applyRange(){
+  var f=document.getElementById('rangeFrom').value;
+  var t=document.getElementById('rangeTo').value;
+  togglePop(false);
+  console.log('Apply range:',f,'-',t);
+  // élesedéskor: fetch(`/data/range?from=${f}&to=${t}`)
+}
+
+/* ============ COMPARISON DROPDOWN ============ */
+var compareBtn=document.getElementById('compareBtn');
+var compareLabel=document.getElementById('compareLabel');
+var compareOptions=['Előző hasonló időszak','Tavaly ugyanezen időszak','Nincs hasonlítás'];
+var compareIdx=0;
+compareBtn.addEventListener('click',function(){
+  compareIdx=(compareIdx+1)%compareOptions.length;
+  compareLabel.textContent=compareOptions[compareIdx];
+});
+
+/* ============ MAIN TREND CHART ============ */
+(function(){
+  var L=['Ápr 8','Ápr 9','Ápr 10','Ápr 11','Ápr 12','Ápr 13','Ápr 14'];
+  var SPEND =[9236,13913,9463,27012,24456,23600,31790];
+  var REV   =[0,28990,25980,154980,59491,61009,312400];
+  var ORDERS=[0,1,1,2,1,1,5];
+  // előző 7 nap (ápr. 1-7) — comparison overlay
+  var REV_PREV=[24990,18420,29800,9990,42850,18900,28900];
+  var SPEND_PREV=[8420,11200,9800,18500,14200,16800,12800];
+
+  var ctx=document.getElementById('trendChart').getContext('2d');
+
+  var grad1=ctx.createLinearGradient(0,0,0,260);
+  grad1.addColorStop(0,'rgba(20,22,28,.22)');
+  grad1.addColorStop(1,'rgba(20,22,28,0)');
+
+  new Chart(ctx,{
+    type:'line',
+    data:{labels:L,datasets:[
+      {label:'Bevétel · jelenlegi',data:REV,borderColor:'#14161C',backgroundColor:grad1,borderWidth:2.5,fill:true,pointBackgroundColor:'#14161C',pointBorderColor:'#fff',pointBorderWidth:2,pointRadius:4,pointHoverRadius:6,tension:.35,yAxisID:'y'},
+      {label:'Bevétel · előző 7 nap',data:REV_PREV,borderColor:'rgba(20,22,28,.4)',backgroundColor:'transparent',borderWidth:1.5,borderDash:[3,4],pointRadius:0,pointHoverRadius:4,pointBackgroundColor:'#9CA3AF',tension:.35,yAxisID:'y'},
+      {label:'Költés · jelenlegi',data:SPEND,borderColor:'#6B7280',backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:'#6B7280',pointRadius:3,pointHoverRadius:5,tension:.35,yAxisID:'y'},
+      {label:'Rendelések',data:ORDERS,backgroundColor:'rgba(20,22,28,.12)',borderColor:'rgba(20,22,28,.45)',borderWidth:1.5,borderRadius:4,yAxisID:'y2',type:'bar',barPercentage:.42,categoryPercentage:.7}
+    ]},
+    options:{
+      responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},animation:{duration:600,easing:'easeOutCubic'},
+      plugins:{
+        legend:{position:'bottom',align:'start',labels:{color:'#6B7280',font:{family:'Instrument Sans',size:11.5,weight:'500'},boxWidth:14,boxHeight:8,padding:14,usePointStyle:true}},
+        tooltip:{
+          backgroundColor:'rgba(20,22,28,.96)',
+          padding:14,cornerRadius:12,
+          titleFont:{family:'Instrument Sans',size:12,weight:'600'},
+          bodyFont:{family:'Instrument Sans',size:12.5},
+          borderColor:'rgba(255,255,255,.08)',borderWidth:1,
+          callbacks:{label:function(c){
+            if(c.datasetIndex===0)return' Bevétel: '+(c.parsed.y?c.parsed.y.toLocaleString('hu-HU')+' Ft':'–');
+            if(c.datasetIndex===1)return' Előző 7 nap: '+(c.parsed.y?c.parsed.y.toLocaleString('hu-HU')+' Ft':'–');
+            if(c.datasetIndex===2)return' Költés: '+(c.parsed.y?c.parsed.y.toLocaleString('hu-HU')+' Ft':'–');
+            return' Rendelések: '+c.parsed.y;
+          }}
+        }
+      },
+      scales:{
+        x:{grid:{color:'rgba(20,22,28,.06)',drawBorder:false},ticks:{color:'#9CA3AF',font:{family:'Instrument Sans',size:11}}},
+        y:{position:'left',grid:{color:'rgba(20,22,28,.06)',drawBorder:false},ticks:{color:'#9CA3AF',font:{family:'Instrument Sans',size:11},callback:function(v){return (v/1000).toLocaleString('hu-HU')+' eFt'}}},
+        y2:{position:'right',grid:{drawOnChartArea:false,drawBorder:false},ticks:{color:'#9CA3AF',font:{family:'Instrument Sans',size:11},stepSize:1,precision:0}}
+      }
+    }
+  });
+})();
 </script>
 </body>
 </html>
