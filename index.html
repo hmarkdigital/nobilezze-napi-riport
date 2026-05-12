@@ -399,6 +399,21 @@
   .kpi-exp-label{font-weight:700;margin-bottom:4px;color:var(--ink);letter-spacing:-.005em}
   .kpi-exp-text{color:var(--dim);line-height:1.55;font-size:12.5px}
 
+
+  /* SECTION DIVIDERS */
+  .section-divider{display:flex;align-items:baseline;gap:18px;margin:32px 0 14px;padding:0 2px}
+  .section-divider::before,.section-divider::after{content:'';height:1px;background:var(--hairline-strong);flex:1;align-self:center}
+  .section-divider .sd-title{font-family:var(--serif);font-size:14px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--ink);white-space:nowrap;font-variation-settings:"opsz" 60}
+  .section-divider .sd-sub{font-size:10.5px;color:var(--dim);font-weight:500;letter-spacing:.04em;white-space:nowrap}
+  @media(max-width:640px){
+    .section-divider{margin:24px 0 10px;gap:10px}
+    .section-divider .sd-title{font-size:11.5px;letter-spacing:.16em}
+    .section-divider .sd-sub{display:none}
+  }
+  /* VIEW TOGGLE (Mind / Webshop / Marketing) */
+  body.view-webshop .section-marketing-block{display:none}
+  body.view-marketing .section-webshop-block{display:none}
+
   /* FOOTER */
   footer{
     margin-top:48px;padding:18px 22px;font-size:12px;color:var(--dim);
@@ -487,11 +502,18 @@
     <span class="filter-label">Időszak</span>
     <div class="chip-row" id="periodChips">
       <button class="chip active" data-period="d">Tegnap</button>
-      <button class="chip" data-period="t">Ma</button>
       <button class="chip" data-period="w">Elmúlt 7 nap</button>
       <button class="chip" data-period="m30">Elmúlt 30 nap</button>
       <button class="chip" data-period="mtd">Ez a hónap</button>
-      <button class="chip" data-period="custom" id="customBtn">Egyedi</button>
+    </div>
+
+    <div class="filter-divider"></div>
+
+    <span class="filter-label">Nézet</span>
+    <div class="chip-row" id="viewChips">
+      <button class="chip active" data-view="all">Mind</button>
+      <button class="chip" data-view="webshop">Webshop</button>
+      <button class="chip" data-view="marketing">Marketing</button>
     </div>
 
     <div class="filter-divider"></div>
@@ -501,25 +523,6 @@
       <strong id="compareLabel">Előző hasonló időszak</strong>
       <svg viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     </button>
-
-    <!-- Custom range popover -->
-    <div class="range-pop" id="rangePop">
-      <div>
-        <label>Mettől</label>
-        <input type="date" id="rangeFrom" value="2026-04-08">
-      </div>
-      <div>
-        <label>Meddig</label>
-        <input type="date" id="rangeTo" value="2026-04-14">
-      </div>
-      <div class="range-quick">
-        <button onclick="quickRange('w1')">Múlt hét</button>
-        <button onclick="quickRange('m1')">Múlt hónap</button>
-        <button onclick="quickRange('q1')">Előző negyedév</button>
-        <button onclick="quickRange('y1')">Tavaly ugyanaz</button>
-      </div>
-      <button class="range-apply" onclick="applyRange()">Alkalmaz</button>
-    </div>
   </div>
 
   <!-- ============ DAILY SIGNAL ============ -->
@@ -608,103 +611,30 @@
     </div>
   </div>
 
-  <!-- ============ COSTING OVERVIEW ============ -->
-  <div class="grid grid-spend anim anim-5">
-    <div class="spend-card">
-      <div class="spend-row">
-        <div>
-          <div class="spend-label">Költés · ez a hónap</div>
-          <div class="spend-value">915 014 Ft</div>
-        </div>
-      </div>
-      <div class="spend-sub">Május 1. óta · <b>12 nap aktív</b> · napi átlag&nbsp;76&nbsp;251&nbsp;Ft</div>
-      <div class="spend-mini" title="Napi költés eloszlás május hónapban (Máj. 1–11)">
-        <div class="spend-mini-bar" style="height:59%" title="Máj 1: 63 469 Ft"></div>
-        <div class="spend-mini-bar" style="height:83%" title="Máj 2: 89 996 Ft"></div>
-        <div class="spend-mini-bar" style="height:86%" title="Máj 3: 92 972 Ft"></div>
-        <div class="spend-mini-bar" style="height:69%" title="Máj 4: 74 379 Ft"></div>
-        <div class="spend-mini-bar" style="height:62%" title="Máj 5: 66 899 Ft"></div>
-        <div class="spend-mini-bar" style="height:57%" title="Máj 6: 61 687 Ft"></div>
-        <div class="spend-mini-bar" style="height:67%" title="Máj 7: 71 920 Ft"></div>
-        <div class="spend-mini-bar peak" style="height:100%" title="Máj 8: 107 880 Ft (csúcs)"></div>
-        <div class="spend-mini-bar" style="height:86%" title="Máj 9: 92 513 Ft"></div>
-        <div class="spend-mini-bar" style="height:94%" title="Máj 10: 101 372 Ft"></div>
-        <div class="spend-mini-bar" style="height:71%" title="Máj 11: 76 064 Ft"></div>
-      </div>
-    </div>
-
-    <div class="spend-card">
-      <div class="spend-row">
-        <div>
-          <div class="spend-label">Költés · idei év</div>
-          <div class="spend-value">2 078 704 Ft</div>
-        </div>
-      </div>
-      <div class="spend-sub">2026. január 1. óta · havi átlag <b>415&nbsp;741&nbsp;Ft</b></div>
-      <div class="spend-mini" title="Havi költés eloszlás 2026-ban (becsült)">
-        <div class="spend-mini-bar" style="height:18%" title="Január (alacsony)"></div>
-        <div class="spend-mini-bar" style="height:30%" title="Február"></div>
-        <div class="spend-mini-bar" style="height:46%" title="Március"></div>
-        <div class="spend-mini-bar" style="height:62%" title="Április"></div>
-        <div class="spend-mini-bar peak" style="height:100%" title="Május (MTD, csúcs)"></div>
-      </div>
-    </div>
-
-    <div class="spend-card">
-      <div class="spend-row">
-        <div>
-          <div class="spend-label">Kampány indítása óta</div>
-          <div class="spend-value">2 062 841 Ft</div>
-        </div>
-      </div>
-      <div class="spend-sub">Lifetime · 2024. június 12. óta · ~99%-ot 2026-ban költöttünk</div>
-      <div class="spend-mini" title="Negyedéves költés trend (lifetime)">
-        <div class="spend-mini-bar" style="height:3%" title="Q3 2024"></div>
-        <div class="spend-mini-bar" style="height:3%" title="Q4 2024"></div>
-        <div class="spend-mini-bar" style="height:3%" title="Q1 2025"></div>
-        <div class="spend-mini-bar" style="height:3%" title="Q2 2025"></div>
-        <div class="spend-mini-bar" style="height:3%" title="Q3 2025"></div>
-        <div class="spend-mini-bar" style="height:5%" title="Q4 2025"></div>
-        <div class="spend-mini-bar" style="height:55%" title="Q1 2026"></div>
-        <div class="spend-mini-bar peak" style="height:100%" title="Q2 2026 (folyamatban)"></div>
-      </div>
-    </div>
+  
+  <!-- ============ SECTION: WEBSHOP ============ -->
+  <div class="section-divider section-webshop-block">
+    <span class="sd-title">Webshop</span>
+    <span class="sd-sub">Értékesítés · Shopify élő adatok</span>
   </div>
 
-  <!-- ============ SECONDARY KPI ROW ============ -->
-  <div class="grid grid-4 anim anim-6" data-v="d">
+  <!-- ============ WEBSHOP SECONDARY KPI ============ -->
+  <div class="grid grid-4 anim anim-6 section-webshop-block" data-v="d">
     <div class="kpi-s"><div class="kpi-s-label">Bruttó bevétel</div><div class="kpi-s-value">138 552 Ft</div><div class="kpi-s-delta">Returns előtti összeg</div></div>
     <div class="kpi-s"><div class="kpi-s-label">Visszatérítések</div><div class="kpi-s-value">211 998 Ft</div><div class="kpi-s-delta"><strong>kiugró nap</strong> · érdemes vizsgálni</div></div>
     <div class="kpi-s"><div class="kpi-s-label">Kedvezmények</div><div class="kpi-s-value">22 829 Ft</div><div class="kpi-s-delta">Bruttó 16,5%-a</div></div>
     <div class="kpi-s"><div class="kpi-s-label">Sessions</div><div class="kpi-s-value">1 706</div><div class="kpi-s-delta">Shopify session-szám</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">Költés (Meta)</div><div class="kpi-s-value">76 064 Ft</div><div class="kpi-s-delta">34&nbsp;106 megjelenés · 1&nbsp;878 kattintás</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">CTR</div><div class="kpi-s-value">5,51%</div><div class="kpi-s-delta"><strong>kiváló</strong> · 4,79% heti átlag felett</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">CPM</div><div class="kpi-s-value">2 230 Ft</div><div class="kpi-s-delta">1000 megjelenés ára</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">Frekvencia</div><div class="kpi-s-value">1,43</div><div class="kpi-s-delta">Egészséges (2,0 alatt)</div></div>
   </div>
 
-  <div class="grid grid-4 anim anim-6" data-v="w">
-    <div class="kpi-s"><div class="kpi-s-label">Költés · 7 nap</div><div class="kpi-s-value">578 336 Ft</div><div class="kpi-s-delta">Heti összesen (Meta)</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">CTR · átlag</div><div class="kpi-s-value">4,79%</div><div class="kpi-s-delta">Heti súlyozott · 332&nbsp;225 megj.</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">CPM · átlag</div><div class="kpi-s-value">1 741 Ft</div><div class="kpi-s-delta">Hatékony elérés</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">CPA (valódi)</div><div class="kpi-s-value">10 515 Ft</div><div class="kpi-s-delta">Shopify rendelésre vetítve</div></div>
+  <div class="grid grid-4 anim anim-6 section-webshop-block" data-v="w">
     <div class="kpi-s"><div class="kpi-s-label">Sessions · 7 nap</div><div class="kpi-s-value">11 972</div><div class="kpi-s-delta">Shopify · napi átl. 1&nbsp;710</div></div>
     <div class="kpi-s"><div class="kpi-s-label">Konv. ráta · átlag</div><div class="kpi-s-value">0,44%</div><div class="kpi-s-delta">53 vásárlás / 11&nbsp;972 session</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">Reach · 7 nap</div><div class="kpi-s-value">133 697</div><div class="kpi-s-delta">Egyedi elérés (Meta)</div></div>
-    <div class="kpi-s"><div class="kpi-s-label">Frekvencia · átlag</div><div class="kpi-s-value">2,48</div><div class="kpi-s-delta">Heti felső határ közelében</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">AOV · 7 nap</div><div class="kpi-s-value">30 731 Ft</div><div class="kpi-s-delta">55 rendelés átlaga</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Vásárlók · 7 nap</div><div class="kpi-s-value">52 fő</div><div class="kpi-s-delta">47 új · 5 visszatérő</div></div>
   </div>
 
-  <!-- ============ TREND + TOP PRODUCTS ============ -->
-  <div class="grid grid-8-4 anim anim-7">
-
-    <div class="card">
-      <div class="sec-head">
-        <span class="sec-title">7 napos trend</span>
-        <span class="sec-sub">Bevétel · Költés · Rendelések · <em style="font-style:normal;color:var(--ink-3)">+ előző időszak</em></span>
-      </div>
-      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
-    </div>
-
+  <!-- ============ WEBSHOP DETAIL GRID ============ -->
+  <div class="grid grid-3 anim anim-8 section-webshop-block">
     <div class="card">
       <div class="sec-head">
         <span class="sec-title">Top termékek</span>
@@ -828,12 +758,6 @@
         </div>
       </div>
     </div>
-
-  </div>
-
-  <!-- ============ MIX + FUNNEL + SOURCE ============ -->
-  <div class="grid grid-3 anim anim-8">
-
     <div class="card">
       <div class="sec-head">
         <span class="sec-title">Vásárlói mix</span>
@@ -897,7 +821,6 @@
         </div>
       </div>
     </div>
-
     <div class="card">
       <div class="sec-head">
         <span class="sec-title">Vásárlási tölcsér</span>
@@ -1051,7 +974,95 @@
         <div class="funnel-note">Checkout → Vásárlás drop-off 60% — emlékeztető e-mail (abandoned checkout flow) jelentős plusz bevételt hozhat.</div>
       </div>
     </div>
+  </div>
 
+
+  <!-- ============ SECTION: MARKETING ============ -->
+  <div class="section-divider section-marketing-block">
+    <span class="sd-title">Marketing</span>
+    <span class="sd-sub">Hirdetések · Meta Ads + GA4</span>
+  </div>
+
+<!-- ============ COSTING OVERVIEW ============ -->
+  <div class="grid grid-spend anim anim-5 section-marketing-block">
+    <div class="spend-card">
+      <div class="spend-row">
+        <div>
+          <div class="spend-label">Költés · ez a hónap</div>
+          <div class="spend-value">915 014 Ft</div>
+        </div>
+      </div>
+      <div class="spend-sub">Május 1. óta · <b>12 nap aktív</b> · napi átlag&nbsp;76&nbsp;251&nbsp;Ft</div>
+      <div class="spend-mini" title="Napi költés eloszlás május hónapban (Máj. 1–11)">
+        <div class="spend-mini-bar" style="height:59%" title="Máj 1: 63 469 Ft"></div>
+        <div class="spend-mini-bar" style="height:83%" title="Máj 2: 89 996 Ft"></div>
+        <div class="spend-mini-bar" style="height:86%" title="Máj 3: 92 972 Ft"></div>
+        <div class="spend-mini-bar" style="height:69%" title="Máj 4: 74 379 Ft"></div>
+        <div class="spend-mini-bar" style="height:62%" title="Máj 5: 66 899 Ft"></div>
+        <div class="spend-mini-bar" style="height:57%" title="Máj 6: 61 687 Ft"></div>
+        <div class="spend-mini-bar" style="height:67%" title="Máj 7: 71 920 Ft"></div>
+        <div class="spend-mini-bar peak" style="height:100%" title="Máj 8: 107 880 Ft (csúcs)"></div>
+        <div class="spend-mini-bar" style="height:86%" title="Máj 9: 92 513 Ft"></div>
+        <div class="spend-mini-bar" style="height:94%" title="Máj 10: 101 372 Ft"></div>
+        <div class="spend-mini-bar" style="height:71%" title="Máj 11: 76 064 Ft"></div>
+      </div>
+    </div>
+
+    <div class="spend-card">
+      <div class="spend-row">
+        <div>
+          <div class="spend-label">Költés · idei év</div>
+          <div class="spend-value">2 078 704 Ft</div>
+        </div>
+      </div>
+      <div class="spend-sub">2026. január 1. óta · havi átlag <b>415&nbsp;741&nbsp;Ft</b></div>
+      <div class="spend-mini" title="Havi költés eloszlás 2026-ban (becsült)">
+        <div class="spend-mini-bar" style="height:18%" title="Január (alacsony)"></div>
+        <div class="spend-mini-bar" style="height:30%" title="Február"></div>
+        <div class="spend-mini-bar" style="height:46%" title="Március"></div>
+        <div class="spend-mini-bar" style="height:62%" title="Április"></div>
+        <div class="spend-mini-bar peak" style="height:100%" title="Május (MTD, csúcs)"></div>
+      </div>
+    </div>
+
+    <div class="spend-card">
+      <div class="spend-row">
+        <div>
+          <div class="spend-label">Kampány indítása óta</div>
+          <div class="spend-value">2 062 841 Ft</div>
+        </div>
+      </div>
+      <div class="spend-sub">Lifetime · 2024. június 12. óta · ~99%-ot 2026-ban költöttünk</div>
+      <div class="spend-mini" title="Negyedéves költés trend (lifetime)">
+        <div class="spend-mini-bar" style="height:3%" title="Q3 2024"></div>
+        <div class="spend-mini-bar" style="height:3%" title="Q4 2024"></div>
+        <div class="spend-mini-bar" style="height:3%" title="Q1 2025"></div>
+        <div class="spend-mini-bar" style="height:3%" title="Q2 2025"></div>
+        <div class="spend-mini-bar" style="height:3%" title="Q3 2025"></div>
+        <div class="spend-mini-bar" style="height:5%" title="Q4 2025"></div>
+        <div class="spend-mini-bar" style="height:55%" title="Q1 2026"></div>
+        <div class="spend-mini-bar peak" style="height:100%" title="Q2 2026 (folyamatban)"></div>
+      </div>
+    </div>
+  </div>
+
+    <!-- ============ MARKETING SECONDARY KPI ============ -->
+  <div class="grid grid-4 anim anim-6 section-marketing-block" data-v="d">
+    <div class="kpi-s"><div class="kpi-s-label">Költés (Meta)</div><div class="kpi-s-value">76 064 Ft</div><div class="kpi-s-delta">34&nbsp;106 megjelenés · 1&nbsp;878 kattintás</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CTR</div><div class="kpi-s-value">5,51%</div><div class="kpi-s-delta"><strong>kiváló</strong> · 4,79% heti átlag felett</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPM</div><div class="kpi-s-value">2 230 Ft</div><div class="kpi-s-delta">1000 megjelenés ára</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Frekvencia</div><div class="kpi-s-value">1,43</div><div class="kpi-s-delta">Egészséges (2,0 alatt)</div></div>
+  </div>
+
+  <div class="grid grid-4 anim anim-6 section-marketing-block" data-v="w">
+    <div class="kpi-s"><div class="kpi-s-label">Költés · 7 nap</div><div class="kpi-s-value">578 336 Ft</div><div class="kpi-s-delta">Heti összesen (Meta)</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CTR · átlag</div><div class="kpi-s-value">4,79%</div><div class="kpi-s-delta">Heti súlyozott · 332&nbsp;225 megj.</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPA (valódi)</div><div class="kpi-s-value">10 515 Ft</div><div class="kpi-s-delta">Shopify rendelésre vetítve</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Frekvencia · átlag</div><div class="kpi-s-value">2,48</div><div class="kpi-s-delta">Heti felső határ közelében</div></div>
+  </div>
+
+  <!-- ============ MARKETING DETAIL ============ -->
+  <div class="grid grid-2 anim anim-8 section-marketing-block">
     <div class="card">
       <div class="sec-head">
         <span class="sec-title">Forgalomforrás</span>
@@ -1079,11 +1090,19 @@
         <div class="src-row"><span class="src-name">TikTok</span><div class="src-bar-bg"><div class="src-bar" style="width:0.1%;opacity:.35"></div></div><span class="src-pct">0,1%</span></div>
       </div>
     </div>
-
+    <div class="card card-flat" style="display:flex;flex-direction:column;justify-content:center">
+      <div class="sec-head"><span class="sec-title">Pixel egyezés</span><span class="sec-sub" data-v="d">Tegnap</span><span class="sec-sub" data-v="w">7 nap</span></div>
+      <div data-v="d" style="font-size:13.5px;color:var(--ink-2);line-height:1.6">
+        Meta pixel <b>4 vásárlást</b> regisztrált tegnap, ami pontosan megegyezik a Shopify <b>4 rendeléssel</b> — <b>100% egyezés</b>. A követés pontos, a hirdetés-optimalizáláshoz megbízható az adat.
+      </div>
+      <div data-v="w" style="font-size:13.5px;color:var(--ink-2);line-height:1.6">
+        Meta pixel <b>51 vásárlást</b> regisztrált a héten, a Shopify <b>55 rendeléssel</b> — <b>93% egyezés</b>. Az ~7%-os eltérés normál sávban van (iOS opt-out, AdBlock, későn betöltött pixel).
+      </div>
+    </div>
   </div>
 
-  <!-- ============ TOP CREATIVES ============ -->
-  <div class="grid anim anim-9">
+<!-- ============ TOP CREATIVES ============ -->
+  <div class="grid anim anim-9 section-marketing-block">
     <div class="card card-flat">
       <div class="sec-head">
         <span class="sec-title">Top kreatívok</span>
@@ -1255,7 +1274,24 @@
     </div>
   </div>
 
-  <!-- ============ NAPI BONTÁS ============ -->
+  <!-- ============ SECTION: ÁTTEKINTÉS ============ -->
+  <div class="section-divider">
+    <span class="sd-title">Áttekintés</span>
+    <span class="sd-sub">Webshop × Marketing összefüggés</span>
+  </div>
+
+  <!-- ============ TREND CHART (Áttekintés) ============ -->
+  <div class="grid anim anim-7">
+    <div class="card">
+      <div class="sec-head">
+        <span class="sec-title">7 napos trend</span>
+        <span class="sec-sub">Bevétel · Költés · Rendelések · <em style="font-style:normal;color:var(--ink-3)">+ előző időszak</em></span>
+      </div>
+      <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+    </div>
+  </div>
+
+<!-- ============ NAPI BONTÁS ============ -->
   <div class="grid anim anim-9">
     <div class="card card-flat">
       <div class="sec-head">
@@ -1410,45 +1446,26 @@ chips.forEach(function(c){
     c.classList.add('active');
     var p=c.dataset.period;
     document.body.classList.toggle('w',p==='w');
-    if(p==='custom'){togglePop(true)}else{togglePop(false)}
   });
 });
 
-/* ============ RANGE POPOVER ============ */
-function togglePop(force){
-  var pop=document.getElementById('rangePop');
-  if(typeof force==='boolean')pop.classList.toggle('open',force);
-  else pop.classList.toggle('open');
-}
-document.addEventListener('click',function(e){
-  var pop=document.getElementById('rangePop');
-  var btn=document.getElementById('customBtn');
-  if(!pop.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){
-    pop.classList.remove('open');
-  }
+/* ============ VIEW CHIPS (Mind / Webshop / Marketing) ============ */
+var viewChips=document.querySelectorAll('#viewChips .chip');
+viewChips.forEach(function(c){
+  c.addEventListener('click',function(){
+    viewChips.forEach(function(x){x.classList.remove('active')});
+    c.classList.add('active');
+    var v=c.dataset.view;
+    document.body.classList.remove('view-webshop','view-marketing');
+    if(v==='webshop')document.body.classList.add('view-webshop');
+    if(v==='marketing')document.body.classList.add('view-marketing');
+  });
 });
-function quickRange(type){
-  var today=new Date('2026-04-14');
-  var from=new Date(today),to=new Date(today);
-  if(type==='w1'){from.setDate(today.getDate()-7);to.setDate(today.getDate()-1)}
-  if(type==='m1'){from=new Date(today.getFullYear(),today.getMonth()-1,1);to=new Date(today.getFullYear(),today.getMonth(),0)}
-  if(type==='q1'){from=new Date(today.getFullYear(),today.getMonth()-3,1);to=new Date(today.getFullYear(),today.getMonth(),0)}
-  if(type==='y1'){from.setFullYear(today.getFullYear()-1);to.setFullYear(today.getFullYear()-1)}
-  document.getElementById('rangeFrom').value=from.toISOString().slice(0,10);
-  document.getElementById('rangeTo').value=to.toISOString().slice(0,10);
-}
-function applyRange(){
-  var f=document.getElementById('rangeFrom').value;
-  var t=document.getElementById('rangeTo').value;
-  togglePop(false);
-  console.log('Apply range:',f,'-',t);
-  // élesedéskor: fetch(`/data/range?from=${f}&to=${t}`)
-}
 
 /* ============ COMPARISON DROPDOWN ============ */
 var compareBtn=document.getElementById('compareBtn');
 var compareLabel=document.getElementById('compareLabel');
-var compareOptions=['Előző hasonló időszak','Tavaly ugyanezen időszak','Nincs hasonlítás'];
+var compareOptions=['Előző hasonló időszak','Nincs hasonlítás'];
 var compareIdx=0;
 compareBtn.addEventListener('click',function(){
   compareIdx=(compareIdx+1)%compareOptions.length;
