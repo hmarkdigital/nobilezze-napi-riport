@@ -297,7 +297,7 @@
     position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
   .mix-donut-num{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--ink);line-height:1;letter-spacing:-.02em;font-variation-settings:"opsz" 80}
-  .mix-donut-lbl{font-size:9px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-top:3px;font-weight:600}
+  .mix-donut-lbl{font-size:8.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--dim);margin-top:4px;font-weight:600;max-width:74px;text-align:center;line-height:1.05}
   .mix-legend{flex:1;display:flex;flex-direction:column;gap:8px}
   .mix-leg-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12.5px}
   .mix-leg-name{color:var(--ink-2);display:flex;align-items:center;gap:8px}
@@ -499,6 +499,23 @@
 </head>
 <body>
 <div class="wrap">
+
+  <!-- Global SVG defs (always present so url(#fgrad) etc. resolve in all funnel variants) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="fgrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#3A3D45"/>
+        <stop offset="100%" stop-color="#0E1014"/>
+      </linearGradient>
+      <linearGradient id="fhi" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </linearGradient>
+      <filter id="fshadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(20,22,28,.20)"/>
+      </filter>
+    </defs>
+  </svg>
 
   <!-- ============ HEADER ============ -->
   <header class="anim anim-1">
@@ -1091,20 +1108,6 @@
 
       <div class="funnel" data-v="d">
         <svg class="funnel-svg" viewBox="0 0 480 310" preserveAspectRatio="xMidYMid meet" aria-label="Vásárlási tölcsér">
-          <defs>
-            <linearGradient id="fgrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#3A3D45"/>
-              <stop offset="100%" stop-color="#0E1014"/>
-            </linearGradient>
-            <linearGradient id="fhi" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="#ffffff" stop-opacity=".22"/>
-              <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
-            </linearGradient>
-            <filter id="fshadow" x="-50%" y="-50%" width="200%" height="200%">
-              <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="rgba(20,22,28,.20)"/>
-            </filter>
-          </defs>
-
           <g class="layer-group stage-1">
             <path d="M40,15 L300,15 L270,75 L70,75 Z" fill="url(#fgrad)" filter="url(#fshadow)"/>
             <path d="M40,15 L300,15 L296,22 L44,22 Z" fill="url(#fhi)"/>
