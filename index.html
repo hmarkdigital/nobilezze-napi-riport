@@ -426,25 +426,40 @@
   footer .src-tag{font-size:10.5px;padding:4px 10px;background:rgba(20,22,28,.06);border-radius:99px;color:var(--ink-2);font-weight:500;letter-spacing:.02em;display:inline-flex;align-items:center;gap:6px}
   footer .src-tag::before{content:'';width:6px;height:6px;border-radius:99px;background:var(--ink-3)}
 
-  /* VIEW SWITCH */
-  [data-v="w"]{display:none}
-  body.w [data-v="d"]{display:none}
+  /* VIEW SWITCH — 4 periods (d/w/m30/mtd) */
+  [data-v="w"],[data-v="m30"],[data-v="mtd"]{display:none}
+  .grid-4[data-v="w"],.grid-4[data-v="m30"],.grid-4[data-v="mtd"]{display:none}
+  .product-list[data-v="w"],.product-list[data-v="m30"],.product-list[data-v="mtd"]{display:none}
+  .funnel[data-v="w"],.funnel[data-v="m30"],.funnel[data-v="mtd"]{display:none}
+  .mix-wrap[data-v="w"],.mix-wrap[data-v="m30"],.mix-wrap[data-v="mtd"]{display:none}
+  .src-list[data-v="w"],.src-list[data-v="m30"],.src-list[data-v="mtd"]{display:none}
+
+  /* body.w (Elmúlt 7 nap) */
+  body.w [data-v="d"],body.w [data-v="m30"],body.w [data-v="mtd"]{display:none}
   body.w [data-v="w"]{display:block}
   body.w .grid-4[data-v="w"]{display:grid}
-  body.w .grid-4[data-v="d"]{display:none}
   body.w .product-list[data-v="w"]{display:flex}
-  body.w .product-list[data-v="d"]{display:none}
   body.w .funnel[data-v="w"]{display:flex}
-  body.w .funnel[data-v="d"]{display:none}
   body.w .mix-wrap[data-v="w"]{display:flex}
-  body.w .mix-wrap[data-v="d"]{display:none}
   body.w .src-list[data-v="w"]{display:flex}
-  body.w .src-list[data-v="d"]{display:none}
-  .grid-4[data-v="w"]{display:none}
-  .product-list[data-v="w"]{display:none}
-  .funnel[data-v="w"]{display:none}
-  .mix-wrap[data-v="w"]{display:none}
-  .src-list[data-v="w"]{display:none}
+
+  /* body.m30 (Elmúlt 30 nap) */
+  body.m30 [data-v="d"],body.m30 [data-v="w"],body.m30 [data-v="mtd"]{display:none}
+  body.m30 [data-v="m30"]{display:block}
+  body.m30 .grid-4[data-v="m30"]{display:grid}
+  body.m30 .product-list[data-v="m30"]{display:flex}
+  body.m30 .funnel[data-v="m30"]{display:flex}
+  body.m30 .mix-wrap[data-v="m30"]{display:flex}
+  body.m30 .src-list[data-v="m30"]{display:flex}
+
+  /* body.mtd (Ez a hónap) */
+  body.mtd [data-v="d"],body.mtd [data-v="w"],body.mtd [data-v="m30"]{display:none}
+  body.mtd [data-v="mtd"]{display:block}
+  body.mtd .grid-4[data-v="mtd"]{display:grid}
+  body.mtd .product-list[data-v="mtd"]{display:flex}
+  body.mtd .funnel[data-v="mtd"]{display:flex}
+  body.mtd .mix-wrap[data-v="mtd"]{display:flex}
+  body.mtd .src-list[data-v="mtd"]{display:flex}
 
   /* RESPONSIVE */
   @media(max-width:1100px){
@@ -538,6 +553,18 @@
       <b>Stabil hét.</b> Az elmúlt 7 napban 55 rendelés érkezett 1&nbsp;690&nbsp;227&nbsp;Ft nettó értékben (Shopify), valódi heti ROAS&nbsp;2,92×. Az előző héthez képest +6,3% bevétel. Meta pixel és Shopify rendelés között 93% egyezés — a mérés pontos.
     </div>
   </div>
+  <div class="banner anim anim-3" data-v="m30">
+    <div class="banner-dot"></div>
+    <div class="banner-text">
+      <b>30 napos áttekintés.</b> Apr. 12 – máj. 11 között <b>156 rendelés</b> érkezett <b>5&nbsp;320&nbsp;417&nbsp;Ft</b> nettó értékben. Valódi 30 napos ROAS&nbsp;<b>3.01×</b> (3,01×). Meta költés: 1&nbsp;765&nbsp;792&nbsp;Ft. Pixel egyezés 91% — a követés megbízható. A bruttó-nettó 19,5%-os szakadékot a visszatérítések (646&nbsp;402&nbsp;Ft) és kedvezmények (642&nbsp;068&nbsp;Ft) okozzák.
+    </div>
+  </div>
+  <div class="banner anim anim-3" data-v="mtd">
+    <div class="banner-dot"></div>
+    <div class="banner-text">
+      <b>Ez a hónap eddig (MTD).</b> Máj. 1 – máj. 11 között <b>93 rendelés</b> érkezett <b>3&nbsp;135&nbsp;326&nbsp;Ft</b> nettó értékben. Valódi MTD ROAS&nbsp;<b>3,49×</b>. Meta költés: 899&nbsp;203&nbsp;Ft (a havi budget tempóban). Pixel egyezés 94% — pontos mérés. Visszatérítés-arány a bruttó 10,4%-a — figyelemmel kísérendő.
+    </div>
+  </div>
 
   <!-- ============ HERO KPI ROW ============ -->
   <div class="grid grid-4 anim anim-4" data-v="d">
@@ -611,6 +638,52 @@
     </div>
   </div>
 
+  <div class="grid grid-4 anim anim-4" data-v="m30">
+    <div class="card-dark kpi-h">
+      <div class="kpi-h-label">Bevétel · Shopify (nettó)</div>
+      <div class="kpi-h-value">5 320 417 Ft</div>
+      <div class="kpi-h-sub">Elmúlt 30 nap (ápr. 12 – máj. 11)</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Rendelések</div>
+      <div class="kpi-h-value">156</div>
+      <div class="kpi-h-sub">Meta pixel: 142 → 91% egyezés</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Valódi ROAS · átlag</div>
+      <div class="kpi-h-value">3,01×</div>
+      <div class="kpi-h-sub">Shopify ÷ Meta költés (1 765 792 Ft)</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Átl. kosár</div>
+      <div class="kpi-h-value">38 249 Ft</div>
+      <div class="kpi-h-sub">156 rendelés átlaga</div>
+    </div>
+  </div>
+
+  <div class="grid grid-4 anim anim-4" data-v="mtd">
+    <div class="card-dark kpi-h">
+      <div class="kpi-h-label">Bevétel · Shopify (nettó)</div>
+      <div class="kpi-h-value">3 135 326 Ft</div>
+      <div class="kpi-h-sub">Ez a hónap (máj. 1 – máj. 11)</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Rendelések</div>
+      <div class="kpi-h-value">93</div>
+      <div class="kpi-h-sub">Meta pixel: 87 → 94% egyezés</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Valódi ROAS · átlag</div>
+      <div class="kpi-h-value">3,49×</div>
+      <div class="kpi-h-sub">Shopify ÷ Meta költés (899 203 Ft)</div>
+    </div>
+    <div class="card kpi-h">
+      <div class="kpi-h-label">Átl. kosár</div>
+      <div class="kpi-h-value">38 268 Ft</div>
+      <div class="kpi-h-sub">93 rendelés átlaga</div>
+    </div>
+  </div>
+
   
   <!-- ============ SECTION: WEBSHOP ============ -->
   <div class="section-divider section-webshop-block">
@@ -633,6 +706,20 @@
     <div class="kpi-s"><div class="kpi-s-label">Vásárlók · 7 nap</div><div class="kpi-s-value">52 fő</div><div class="kpi-s-delta">47 új · 5 visszatérő</div></div>
   </div>
 
+  <div class="grid grid-4 anim anim-6 section-webshop-block" data-v="m30">
+    <div class="kpi-s"><div class="kpi-s-label">Bruttó bevétel</div><div class="kpi-s-value">6 608 888 Ft</div><div class="kpi-s-delta">Returns előtti összeg</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Visszatérítések</div><div class="kpi-s-value">646 402 Ft</div><div class="kpi-s-delta">10% a bruttóhoz képest</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Kedvezmények</div><div class="kpi-s-value">642 068 Ft</div><div class="kpi-s-delta">10% a bruttóhoz képest</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Sessions</div><div class="kpi-s-value">53 359</div><div class="kpi-s-delta">Konv. ráta 0,28%</div></div>
+  </div>
+
+  <div class="grid grid-4 anim anim-6 section-webshop-block" data-v="mtd">
+    <div class="kpi-s"><div class="kpi-s-label">Bruttó bevétel</div><div class="kpi-s-value">4 088 940 Ft</div><div class="kpi-s-delta">Returns előtti összeg</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Visszatérítések</div><div class="kpi-s-value">423 608 Ft</div><div class="kpi-s-delta">10% a bruttóhoz képest</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Kedvezmények</div><div class="kpi-s-value">530 005 Ft</div><div class="kpi-s-delta">13% a bruttóhoz képest</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Sessions</div><div class="kpi-s-value">19 727</div><div class="kpi-s-delta">Konv. ráta 0,45%</div></div>
+  </div>
+
   <!-- ============ WEBSHOP DETAIL GRID ============ -->
   <div class="grid grid-3 anim anim-8 section-webshop-block">
     <div class="card">
@@ -640,6 +727,8 @@
         <span class="sec-title">Top termékek</span>
         <span class="sec-sub" data-v="d">Tegnap</span>
         <span class="sec-sub" data-v="w">7 nap</span>
+        <span class="sec-sub" data-v="m30">30 nap</span>
+        <span class="sec-sub" data-v="mtd">Ez a hónap</span>
       </div>
 
       <div class="product-list" data-v="d">
@@ -757,12 +846,130 @@
           </div>
         </div>
       </div>
+
+      <div class="product-list" data-v="m30">
+        <div class="product-row">
+          <div class="product-rank">1</div>
+          <div class="product-info">
+            <div class="product-name">Jaycee Vanilla</div>
+            <div class="product-stock"><span class="stock-pill stock-low">5 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">399 153 Ft</div>
+            <div class="product-qty">9 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">2</div>
+          <div class="product-info">
+            <div class="product-name">Sheila Signature</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">210 201 Ft</div>
+            <div class="product-qty">5 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">3</div>
+          <div class="product-info">
+            <div class="product-name">Mind 001</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">208 629 Ft</div>
+            <div class="product-qty">4 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">4</div>
+          <div class="product-info">
+            <div class="product-name">Lyra Optic White</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">206 945 Ft</div>
+            <div class="product-qty">6 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">5</div>
+          <div class="product-info">
+            <div class="product-name">Arden Brown</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">1 db készlet</span> <span>Kritikus</span></div>
+          </div>
+          <div>
+            <div class="product-num">193 986 Ft</div>
+            <div class="product-qty">4 db</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="product-list" data-v="mtd">
+        <div class="product-row">
+          <div class="product-rank">1</div>
+          <div class="product-info">
+            <div class="product-name">Jaycee Vanilla</div>
+            <div class="product-stock"><span class="stock-pill stock-low">5 db készlet</span></div>
+          </div>
+          <div>
+            <div class="product-num">347 980 Ft</div>
+            <div class="product-qty">8 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">2</div>
+          <div class="product-info">
+            <div class="product-name">Jaycee Mid Black</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">173 990 Ft</div>
+            <div class="product-qty">4 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">3</div>
+          <div class="product-info">
+            <div class="product-name">Sheila Signature</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">167 688 Ft</div>
+            <div class="product-qty">4 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">4</div>
+          <div class="product-info">
+            <div class="product-name">Lyra Optic White</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">167 583 Ft</div>
+            <div class="product-qty">5 db</div>
+          </div>
+        </div>
+        <div class="product-row">
+          <div class="product-rank">5</div>
+          <div class="product-info">
+            <div class="product-name">Love Click Chevron Big</div>
+            <div class="product-stock"><span class="stock-pill stock-warn">0 db készlet</span> <span>Stockout — utánrendelés!</span></div>
+          </div>
+          <div>
+            <div class="product-num">167 537 Ft</div>
+            <div class="product-qty">3 db</div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="card">
       <div class="sec-head">
         <span class="sec-title">Vásárlói mix</span>
         <span class="sec-sub" data-v="d">Tegnap</span>
         <span class="sec-sub" data-v="w">7 nap</span>
+        <span class="sec-sub" data-v="m30">30 nap</span>
+        <span class="sec-sub" data-v="mtd">Ez a hónap</span>
       </div>
 
       <div class="mix-wrap" data-v="d">
@@ -820,12 +1027,66 @@
           7 napos átlagban <b>47 új és 5 visszatérő vásárló</b> — a klub-arány 9,6%. Új vásárlóból sok érkezik, de a visszahozatal aktiválása (welcome-flow, klub-promóció) hozhat növekedést.
         </div>
       </div>
+
+      <div class="mix-wrap" data-v="m30">
+        <div class="mix-bar-wrap">
+          <div class="mix-donut">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(20,22,28,.07)" stroke-width="14"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#14161C" stroke-width="14" stroke-dasharray="251.33" stroke-dashoffset="226.20" stroke-linecap="butt"/>
+            </svg>
+            <div class="mix-donut-center">
+              <div class="mix-donut-num">10%</div>
+              <div class="mix-donut-lbl">Visszatérő</div>
+            </div>
+          </div>
+          <div class="mix-legend">
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:#14161C"></span>Visszatérő</div>
+              <div class="mix-leg-val">14 fő</div>
+            </div>
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:rgba(20,22,28,.18)"></span>Új vásárló</div>
+              <div class="mix-leg-val">126 fő</div>
+            </div>
+          </div>
+        </div>
+        <div class="mix-stat">30 napos átlagban <b>14 visszatérő és 126 új</b> vásárló — a klub-arány <b>10%</b>. Új vásárlókból sok érkezik, érdemes a visszatérési flow-t (welcome email, klub-promóció) erősíteni.</div>
+      </div>
+
+      <div class="mix-wrap" data-v="mtd">
+        <div class="mix-bar-wrap">
+          <div class="mix-donut">
+            <svg width="100" height="100" viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(20,22,28,.07)" stroke-width="14"/>
+              <circle cx="50" cy="50" r="40" fill="none" stroke="#14161C" stroke-width="14" stroke-dasharray="251.33" stroke-dashoffset="228.21" stroke-linecap="butt"/>
+            </svg>
+            <div class="mix-donut-center">
+              <div class="mix-donut-num">9%</div>
+              <div class="mix-donut-lbl">Visszatérő</div>
+            </div>
+          </div>
+          <div class="mix-legend">
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:#14161C"></span>Visszatérő</div>
+              <div class="mix-leg-val">8 fő</div>
+            </div>
+            <div class="mix-leg-row">
+              <div class="mix-leg-name"><span class="mix-leg-swatch" style="background:rgba(20,22,28,.18)"></span>Új vásárló</div>
+              <div class="mix-leg-val">79 fő</div>
+            </div>
+          </div>
+        </div>
+        <div class="mix-stat">Ez a hónap eddig <b>8 visszatérő és 79 új</b> vásárló — klub-arány <b>9,2%</b>. Hasonló tempóban, mint a 30 napos átlag.</div>
+      </div>
     </div>
     <div class="card">
       <div class="sec-head">
         <span class="sec-title">Vásárlási tölcsér</span>
         <span class="sec-sub" data-v="d">Tegnap · Shopify</span>
         <span class="sec-sub" data-v="w">7 nap · Shopify</span>
+        <span class="sec-sub" data-v="m30">30 nap · Shopify</span>
+        <span class="sec-sub" data-v="mtd">Ez a hónap · Shopify</span>
       </div>
 
       <div class="funnel" data-v="d">
@@ -973,6 +1234,122 @@
 
         <div class="funnel-note">Checkout → Vásárlás drop-off 60% — emlékeztető e-mail (abandoned checkout flow) jelentős plusz bevételt hozhat.</div>
       </div>
+
+      <div class="funnel" data-v="m30">
+        <svg class="funnel-svg" viewBox="0 0 480 310" preserveAspectRatio="xMidYMid meet" aria-label="Vásárlási tölcsér">
+          <g class="layer-group stage-1">
+            <path d="M40,15 L300,15 L270,75 L70,75 Z" fill="url(#fgrad)" filter="url(#fshadow)"/>
+            <path d="M40,15 L300,15 L296,22 L44,22 Z" fill="url(#fhi)"/>
+            <text x="170" y="44" text-anchor="middle" fill="#ffffff" class="fl-num">53 359</text>
+            <text x="170" y="60" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">LÁTOGATÁS</text>
+          </g>
+          <g class="drop-g drop-1">
+            <line x1="305" y1="80" x2="350" y2="80" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M348,76 L356,80 L348,84 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="362" y="77" fill="#14161C" class="fd-num">52 539</text>
+            <text x="362" y="91" fill="#6B7280" class="fd-pct">−98,5%</text>
+          </g>
+          <g class="layer-group stage-2">
+            <path d="M70,85 L270,85 L240,145 L100,145 Z" fill="url(#fgrad)" opacity=".94" filter="url(#fshadow)"/>
+            <path d="M70,85 L270,85 L266,92 L74,92 Z" fill="url(#fhi)"/>
+            <text x="170" y="114" text-anchor="middle" fill="#ffffff" class="fl-num">820</text>
+            <text x="170" y="130" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">KOSÁRBA</text>
+          </g>
+          <g class="drop-g drop-2">
+            <line x1="275" y1="150" x2="320" y2="150" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M318,146 L326,150 L318,154 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="332" y="147" fill="#14161C" class="fd-num">427</text>
+            <text x="332" y="161" fill="#6B7280" class="fd-pct">−52,1%</text>
+          </g>
+          <g class="layer-group stage-3">
+            <path d="M100,155 L240,155 L210,215 L130,215 Z" fill="url(#fgrad)" opacity=".88" filter="url(#fshadow)"/>
+            <path d="M100,155 L240,155 L236,162 L104,162 Z" fill="url(#fhi)"/>
+            <text x="170" y="184" text-anchor="middle" fill="#ffffff" class="fl-num">393</text>
+            <text x="170" y="200" text-anchor="middle" fill="rgba(255,255,255,.65)" class="fl-lbl">CHECKOUT</text>
+          </g>
+          <g class="drop-g drop-3">
+            <line x1="245" y1="220" x2="290" y2="220" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M288,216 L296,220 L288,224 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="302" y="217" fill="#14161C" class="fd-num">245</text>
+            <text x="302" y="231" fill="#6B7280" class="fd-pct">−62,3%</text>
+          </g>
+          <g class="layer-group stage-4">
+            <path d="M130,225 L210,225 L188,285 L152,285 Z" fill="url(#fgrad)" opacity=".82" filter="url(#fshadow)"/>
+            <path d="M130,225 L210,225 L208,232 L132,232 Z" fill="url(#fhi)"/>
+            <text x="170" y="254" text-anchor="middle" fill="#ffffff" class="fl-num">148</text>
+            <text x="170" y="270" text-anchor="middle" fill="rgba(255,255,255,.7)" class="fl-lbl">VÁSÁRLÁS</text>
+          </g>
+        </svg>
+        <div class="funnel-summary">
+          <div class="fs-item">
+            <span class="fs-label">Konv. ráta</span>
+            <span class="fs-value">0,28%</span>
+          </div>
+          <div class="fs-item">
+            <span class="fs-label">Legnagyobb kiesés</span>
+            <span class="fs-value">Látogatás → Kosár</span>
+          </div>
+        </div>
+        <div class="funnel-note">30 napos átlagban a látogatás → kosár drop-off 98,5%. A 393 checkout-ig eljutó látogatóból 148 vásárolt — érdemes az abandoned checkout email flow-t finomítani.</div>
+      </div>
+
+      <div class="funnel" data-v="mtd">
+        <svg class="funnel-svg" viewBox="0 0 480 310" preserveAspectRatio="xMidYMid meet" aria-label="Vásárlási tölcsér">
+          <g class="layer-group stage-1">
+            <path d="M40,15 L300,15 L270,75 L70,75 Z" fill="url(#fgrad)" filter="url(#fshadow)"/>
+            <path d="M40,15 L300,15 L296,22 L44,22 Z" fill="url(#fhi)"/>
+            <text x="170" y="44" text-anchor="middle" fill="#ffffff" class="fl-num">19 727</text>
+            <text x="170" y="60" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">LÁTOGATÁS</text>
+          </g>
+          <g class="drop-g drop-1">
+            <line x1="305" y1="80" x2="350" y2="80" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M348,76 L356,80 L348,84 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="362" y="77" fill="#14161C" class="fd-num">19 266</text>
+            <text x="362" y="91" fill="#6B7280" class="fd-pct">−97,7%</text>
+          </g>
+          <g class="layer-group stage-2">
+            <path d="M70,85 L270,85 L240,145 L100,145 Z" fill="url(#fgrad)" opacity=".94" filter="url(#fshadow)"/>
+            <path d="M70,85 L270,85 L266,92 L74,92 Z" fill="url(#fhi)"/>
+            <text x="170" y="114" text-anchor="middle" fill="#ffffff" class="fl-num">461</text>
+            <text x="170" y="130" text-anchor="middle" fill="rgba(255,255,255,.62)" class="fl-lbl">KOSÁRBA</text>
+          </g>
+          <g class="drop-g drop-2">
+            <line x1="275" y1="150" x2="320" y2="150" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M318,146 L326,150 L318,154 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="332" y="147" fill="#14161C" class="fd-num">224</text>
+            <text x="332" y="161" fill="#6B7280" class="fd-pct">−48,6%</text>
+          </g>
+          <g class="layer-group stage-3">
+            <path d="M100,155 L240,155 L210,215 L130,215 Z" fill="url(#fgrad)" opacity=".88" filter="url(#fshadow)"/>
+            <path d="M100,155 L240,155 L236,162 L104,162 Z" fill="url(#fhi)"/>
+            <text x="170" y="184" text-anchor="middle" fill="#ffffff" class="fl-num">237</text>
+            <text x="170" y="200" text-anchor="middle" fill="rgba(255,255,255,.65)" class="fl-lbl">CHECKOUT</text>
+          </g>
+          <g class="drop-g drop-3">
+            <line x1="245" y1="220" x2="290" y2="220" stroke="rgba(20,22,28,.35)" stroke-width="1" stroke-dasharray="3 3"/>
+            <path d="M288,216 L296,220 L288,224 Z" fill="rgba(20,22,28,.55)"/>
+            <text x="302" y="217" fill="#14161C" class="fd-num">148</text>
+            <text x="302" y="231" fill="#6B7280" class="fd-pct">−62,4%</text>
+          </g>
+          <g class="layer-group stage-4">
+            <path d="M130,225 L210,225 L188,285 L152,285 Z" fill="url(#fgrad)" opacity=".82" filter="url(#fshadow)"/>
+            <path d="M130,225 L210,225 L208,232 L132,232 Z" fill="url(#fhi)"/>
+            <text x="170" y="254" text-anchor="middle" fill="#ffffff" class="fl-num">89</text>
+            <text x="170" y="270" text-anchor="middle" fill="rgba(255,255,255,.7)" class="fl-lbl">VÁSÁRLÁS</text>
+          </g>
+        </svg>
+        <div class="funnel-summary">
+          <div class="fs-item">
+            <span class="fs-label">Konv. ráta</span>
+            <span class="fs-value">0,45%</span>
+          </div>
+          <div class="fs-item">
+            <span class="fs-label">Legnagyobb kiesés</span>
+            <span class="fs-value">Látogatás → Kosár</span>
+          </div>
+        </div>
+        <div class="funnel-note">Ez a hónap eddig 89 vásárlás 19&nbsp;727 sessionből — 0,45% konv. ráta, ami jobb a 30 napos átlagnál (0,28%).</div>
+      </div>
     </div>
   </div>
 
@@ -1061,6 +1438,20 @@
     <div class="kpi-s"><div class="kpi-s-label">Frekvencia · átlag</div><div class="kpi-s-value">2,48</div><div class="kpi-s-delta">Heti felső határ közelében</div></div>
   </div>
 
+  <div class="grid grid-4 anim anim-6 section-marketing-block" data-v="m30">
+    <div class="kpi-s"><div class="kpi-s-label">Költés (Meta)</div><div class="kpi-s-value">1 765 792 Ft</div><div class="kpi-s-delta">1 152 237 megjelenés · 67 758 kattintás</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CTR · átlag</div><div class="kpi-s-value">5,88%</div><div class="kpi-s-delta">314 608 egyedi elérés</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPA (valódi)</div><div class="kpi-s-value">11 319 Ft</div><div class="kpi-s-delta">Shopify rendelésre vetítve</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Frekvencia · átlag</div><div class="kpi-s-value">3,66</div><div class="kpi-s-delta">Magas — fáradtság-kockázat</div></div>
+  </div>
+
+  <div class="grid grid-4 anim anim-6 section-marketing-block" data-v="mtd">
+    <div class="kpi-s"><div class="kpi-s-label">Költés (Meta)</div><div class="kpi-s-value">899 203 Ft</div><div class="kpi-s-delta">538 239 megjelenés · 25 563 kattintás</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CTR · átlag</div><div class="kpi-s-value">4,75%</div><div class="kpi-s-delta">184 881 egyedi elérés</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">CPA (valódi)</div><div class="kpi-s-value">9 668 Ft</div><div class="kpi-s-delta">Shopify rendelésre vetítve</div></div>
+    <div class="kpi-s"><div class="kpi-s-label">Frekvencia · átlag</div><div class="kpi-s-value">2,91</div><div class="kpi-s-delta">Felső sávban</div></div>
+  </div>
+
   <!-- ============ MARKETING DETAIL ============ -->
   <div class="grid grid-2 anim anim-8 section-marketing-block">
     <div class="card">
@@ -1068,6 +1459,8 @@
         <span class="sec-title">Forgalomforrás</span>
         <span class="sec-sub" data-v="d">GA4 · máj. 11</span>
         <span class="sec-sub" data-v="w">GA4 · máj. 5–11</span>
+        <span class="sec-sub" data-v="m30">GA4 · ápr. 12 – máj. 11</span>
+        <span class="sec-sub" data-v="mtd">GA4 · máj. 1–11</span>
       </div>
 
       <div class="src-list" data-v="d">
@@ -1089,6 +1482,26 @@
         <div class="src-row"><span class="src-name">Email</span><div class="src-bar-bg"><div class="src-bar" style="width:2.0%;opacity:.45"></div></div><span class="src-pct">2,0%</span></div>
         <div class="src-row"><span class="src-name">TikTok</span><div class="src-bar-bg"><div class="src-bar" style="width:0.1%;opacity:.35"></div></div><span class="src-pct">0,1%</span></div>
       </div>
+
+      <div class="src-list" data-v="m30">
+        <div class="src-row"><span class="src-name">Facebook</span><div class="src-bar-bg"><div class="src-bar" style="width:72.5%"></div></div><span class="src-pct">72,5%</span></div>
+        <div class="src-row"><span class="src-name">Instagram</span><div class="src-bar-bg"><div class="src-bar" style="width:8.9%;opacity:0.65"></div></div><span class="src-pct">8,9%</span></div>
+        <div class="src-row"><span class="src-name">Direkt</span><div class="src-bar-bg"><div class="src-bar" style="width:8.1%;opacity:0.65"></div></div><span class="src-pct">8,1%</span></div>
+        <div class="src-row"><span class="src-name">TikTok</span><div class="src-bar-bg"><div class="src-bar" style="width:4.4%;opacity:0.45"></div></div><span class="src-pct">4,4%</span></div>
+        <div class="src-row"><span class="src-name">Google</span><div class="src-bar-bg"><div class="src-bar" style="width:2.3%;opacity:0.45"></div></div><span class="src-pct">2,3%</span></div>
+        <div class="src-row"><span class="src-name">Egyéb</span><div class="src-bar-bg"><div class="src-bar" style="width:1.9%;opacity:0.45"></div></div><span class="src-pct">1,9%</span></div>
+        <div class="src-row"><span class="src-name">Email</span><div class="src-bar-bg"><div class="src-bar" style="width:1.8%;opacity:0.45"></div></div><span class="src-pct">1,8%</span></div>
+      </div>
+
+      <div class="src-list" data-v="mtd">
+        <div class="src-row"><span class="src-name">Facebook</span><div class="src-bar-bg"><div class="src-bar" style="width:72.8%"></div></div><span class="src-pct">72,8%</span></div>
+        <div class="src-row"><span class="src-name">Direkt</span><div class="src-bar-bg"><div class="src-bar" style="width:10.8%;opacity:0.65"></div></div><span class="src-pct">10,8%</span></div>
+        <div class="src-row"><span class="src-name">Instagram</span><div class="src-bar-bg"><div class="src-bar" style="width:6.6%;opacity:0.65"></div></div><span class="src-pct">6,6%</span></div>
+        <div class="src-row"><span class="src-name">Egyéb</span><div class="src-bar-bg"><div class="src-bar" style="width:4.6%;opacity:0.45"></div></div><span class="src-pct">4,6%</span></div>
+        <div class="src-row"><span class="src-name">Google</span><div class="src-bar-bg"><div class="src-bar" style="width:2.7%;opacity:0.45"></div></div><span class="src-pct">2,7%</span></div>
+        <div class="src-row"><span class="src-name">Email</span><div class="src-bar-bg"><div class="src-bar" style="width:2.4%;opacity:0.45"></div></div><span class="src-pct">2,4%</span></div>
+        <div class="src-row"><span class="src-name">TikTok</span><div class="src-bar-bg"><div class="src-bar" style="width:0.1%;opacity:0.45"></div></div><span class="src-pct">0,1%</span></div>
+      </div>
     </div>
     <div class="card card-flat" style="display:flex;flex-direction:column;justify-content:center">
       <div class="sec-head"><span class="sec-title">Pixel egyezés</span><span class="sec-sub" data-v="d">Tegnap</span><span class="sec-sub" data-v="w">7 nap</span></div>
@@ -1097,6 +1510,14 @@
       </div>
       <div data-v="w" style="font-size:13.5px;color:var(--ink-2);line-height:1.6">
         Meta pixel <b>51 vásárlást</b> regisztrált a héten, a Shopify <b>55 rendeléssel</b> — <b>93% egyezés</b>. Az ~7%-os eltérés normál sávban van (iOS opt-out, AdBlock, későn betöltött pixel).
+      </div>
+
+      <div data-v="m30" style="font-size:13.5px;color:var(--ink-2);line-height:1.6">
+        Meta pixel <b>142 vásárlást</b> regisztrált az időszakban, a Shopify <b>156 rendeléssel</b> — <b>91% egyezés</b>. Az eltérés normál sávban van (iOS opt-out, AdBlock, későn betöltött pixel).
+      </div>
+
+      <div data-v="mtd" style="font-size:13.5px;color:var(--ink-2);line-height:1.6">
+        Meta pixel <b>87 vásárlást</b> regisztrált az időszakban, a Shopify <b>93 rendeléssel</b> — <b>94% egyezés</b>. Az eltérés normál sávban van (iOS opt-out, AdBlock, későn betöltött pixel).
       </div>
     </div>
   </div>
@@ -1108,6 +1529,8 @@
         <span class="sec-title">Top kreatívok</span>
         <span class="sec-sub" data-v="d">Tegnap · spend szerint</span>
         <span class="sec-sub" data-v="w">7 nap · spend szerint</span>
+        <span class="sec-sub" data-v="m30">30 nap · spend szerint</span>
+        <span class="sec-sub" data-v="mtd">Ez a hónap · spend szerint</span>
       </div>
       <div data-v="d">
       <div class="table-scroll">
@@ -1266,6 +1689,168 @@
             <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span></span></td>
             <td class="num"><span class="cell-num-with-bar">105 672 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:15%"></span></span></span></td>
             <td class="num"><span class="roas-cell"><span class="roas-chip r4">10,29×</span></span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      </div>
+      <div data-v="m30">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Hirdetés</th><th class="num">Költés</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">Bevétel</th><th class="num">ROAS</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Reels | V1</td>
+            <td class="num"><span class="cell-num-with-bar">643 150 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num">6,89%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">51</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">2 370 461 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">3,69×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V4</td>
+            <td class="num"><span class="cell-num-with-bar">200 676 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:31%"></span></span></span></td>
+            <td class="num">4,93%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">13</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">653 924 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:28%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">3,26×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Sz.Rebi</td>
+            <td class="num"><span class="cell-num-with-bar">174 320 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:27%"></span></span></span></td>
+            <td class="num">4,72%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">17</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">701 292 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:30%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,02×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V3 <span class="badge">Top ROAS</span></td>
+            <td class="num"><span class="cell-num-with-bar">152 687 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:24%"></span></span></span></td>
+            <td class="num">6,25%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">14</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">769 686 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:32%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r4">5,04×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V2 <span class="badge">Top CTR</span></td>
+            <td class="num"><span class="cell-num-with-bar">144 534 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:22%"></span></span></span></td>
+            <td class="num">7,12%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">398 521 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:17%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r2">2,76×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V5</td>
+            <td class="num"><span class="cell-num-with-bar">100 463 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:16%"></span></span></span></td>
+            <td class="num">2,92%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">10</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">402 698 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:17%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,01×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Gina |</td>
+            <td class="num"><span class="cell-num-with-bar">94 401 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:15%"></span></span></span></td>
+            <td class="num">7,04%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">8</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">421 802 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:18%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,47×</span></span></td>
+          </tr>
+          <tr>
+            <td>Shopping | Feed</td>
+            <td class="num"><span class="cell-num-with-bar">64 198 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:10%"></span></span></span></td>
+            <td class="num">3,08%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">302 451 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:13%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,71×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Dorka |</td>
+            <td class="num"><span class="cell-num-with-bar">46 292 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:7%"></span></span></span></td>
+            <td class="num">4,55%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">171 543 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:7%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">3,71×</span></span></td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+      </div>
+      <div data-v="mtd">
+      <div class="table-scroll">
+      <table>
+        <thead><tr><th>Hirdetés</th><th class="num">Költés</th><th class="num">CTR</th><th class="num">Vásárlás</th><th class="num">Bevétel</th><th class="num">ROAS</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Reels | V1</td>
+            <td class="num"><span class="cell-num-with-bar">234 519 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num">5,30%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">24</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">1 139 112 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:100%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,86×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Sz.Rebi</td>
+            <td class="num"><span class="cell-num-with-bar">174 320 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:74%"></span></span></span></td>
+            <td class="num">4,72%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">17</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">701 292 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:62%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,02×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V4</td>
+            <td class="num"><span class="cell-num-with-bar">158 915 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:68%"></span></span></span></td>
+            <td class="num">4,39%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">12</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">619 942 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:54%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">3,90×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V5</td>
+            <td class="num"><span class="cell-num-with-bar">76 630 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:33%"></span></span></span></td>
+            <td class="num">2,68%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">10</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">402 698 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:35%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r4">5,26×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V2</td>
+            <td class="num"><span class="cell-num-with-bar">40 690 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:17%"></span></span></span></td>
+            <td class="num">4,90%</td>
+            <td class="num"><span class="dots"><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">200 970 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:18%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r3">4,94×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Gina | <span class="badge">Top CTR</span></td>
+            <td class="num"><span class="cell-num-with-bar">40 287 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:17%"></span></span></span></td>
+            <td class="num">6,87%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">248 331 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:22%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r4">6,16×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | V3</td>
+            <td class="num"><span class="cell-num-with-bar">37 949 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:16%"></span></span></span></td>
+            <td class="num">3,06%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">106 232 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:9%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r2">2,80×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Linda v1</td>
+            <td class="num"><span class="cell-num-with-bar">36 011 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:15%"></span></span></span></td>
+            <td class="num">6,42%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot-num">6</span></span></td>
+            <td class="num"><span class="cell-num-with-bar">363 837 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:32%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r5">10,10×</span></span></td>
+          </tr>
+          <tr>
+            <td>Reels | Linda v4 <span class="badge">Top ROAS</span></td>
+            <td class="num"><span class="cell-num-with-bar">23 770 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:10%"></span></span></span></td>
+            <td class="num">3,83%</td>
+            <td class="num"><span class="dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></span></td>
+            <td class="num"><span class="cell-num-with-bar">314 447 Ft<span class="cell-bar-track"><span class="cell-bar-fill" style="width:28%"></span></span></span></td>
+            <td class="num"><span class="roas-cell"><span class="roas-chip r5">13,23×</span></span></td>
           </tr>
         </tbody>
       </table>
@@ -1445,7 +2030,10 @@ chips.forEach(function(c){
     chips.forEach(function(x){x.classList.remove('active')});
     c.classList.add('active');
     var p=c.dataset.period;
-    document.body.classList.toggle('w',p==='w');
+    document.body.classList.remove('w','m30','mtd');
+    if(p==='w')document.body.classList.add('w');
+    if(p==='m30')document.body.classList.add('m30');
+    if(p==='mtd')document.body.classList.add('mtd');
   });
 });
 
